@@ -13,7 +13,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String msg = "\"OnCreate() method calling\"";
+        String msg = "OnCreate() method calling";
+        Log.d(LOG_TAG, msg);
+    }
+
+    protected void onResume() {
+        super.onResume();
+        String msg = "onResume method calling";
+        Log.d(LOG_TAG, msg);
+
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        String msg = "onDestroy method calling";
         Log.d(LOG_TAG, msg);
     }
 
