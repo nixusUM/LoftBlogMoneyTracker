@@ -6,14 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Date;
 
-public class FirstFragment extends Fragment{
+public class ExpensesFragment extends Fragment{
 
     private ListView listView;
     private List<Transaction> data = new ArrayList<>();
@@ -21,27 +18,22 @@ public class FirstFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.first_fragment, container, false);
+        View view = inflater.inflate(R.layout.expenses_fragment, container, false);
         listView = (ListView) view.findViewById(R.id.main_listview);
         List<Transaction> adapterData = getDataList();
-        getActivity().setTitle("First Fragment");
+        getActivity().setTitle("Траты");
         transactionAdapter = new TransactionAdapter(getActivity(), adapterData);
         listView.setAdapter(transactionAdapter);
         return view;
     }
     private List<Transaction> getDataList() {
-        data.add(new Transaction("Phone", 577, GetDate()));
-        data.add(new Transaction("X-Box", 999, GetDate()));
-        data.add(new Transaction("TV", 78, GetDate()));
-        data.add(new Transaction("Super Car", 1150, GetDate()));
-        data.add(new Transaction("Smart Home", 7555, GetDate()));
-        data.add(new Transaction("Other things", 355, GetDate()));
+        data.add(new Transaction("Phone", 577, new Date()));
+        data.add(new Transaction("X-Box", 999, new Date()));
+        data.add(new Transaction("TV", 78, new Date()));
+        data.add(new Transaction("Super Car", 1150, new Date()));
+        data.add(new Transaction("Smart Home", 7555, new Date()));
+        data.add(new Transaction("Other things", 355, new Date()));
         return data;
-    }
-    private String GetDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
-        String time =  dateFormat.format(new Date());
-        return time;
     }
 }
 

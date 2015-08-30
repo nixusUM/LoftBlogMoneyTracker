@@ -1,38 +1,31 @@
 package ru.loftblog.loftblogmoneytracker;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Transaction {
 
-    public String title;
-    int sum;
-    public String time;
+    private String title;
+    private int sum;
+    private Date time;
 
-    public Transaction(String title, int sum, String time) {
+    public Transaction(String title, int sum, Date time) {
         this.title = title;
         this.sum = sum;
         this.time = time;
     }
+
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public int  getSum() {
         return sum;
     }
 
-    public void setSum(int sum) {
-        this.sum = sum;
-    }
-
     public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
+        Date time = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        return dateFormat.format(time);
+        }
 }

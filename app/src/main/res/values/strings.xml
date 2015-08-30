@@ -4,7 +4,14 @@
     <string name="textName">Item name</string>
     <string name="sumName">Item price</string>
     <string name="itemTime">Item price</string>
-    <string name="first_frame_butt">First Fragment</string>
-    <string name="second_frame_butt">Second Fragment</string>
-    <string name="listColor">#FFFFFF</string>
+    <string name="txtStat">Здесь будет статистика</string>
+    <string name="txtSettings">Здесь будут настройки</string>
+    <string name="txtCateg">Здесь будут категории</string>
+    <!-- Строки для NavigationDrawer -->
+    <string name="nav.drawer.expenses">Траты</string>
+    <string name="nav.drawer.categories">Категории</string>
+    <string name="nav.drawer.statistics">Статистика</string>
+    <string name="nav.drawer.settings">Настройка</string>
+    <string name="name_in_drawer">Ilya Polozov</string>
+    <string name="email">nlbochas@gmail.com</string>
 </resources>

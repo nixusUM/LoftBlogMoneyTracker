@@ -24,15 +24,15 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
         }
-        convertView.setBackgroundColor(Color.parseColor("#CFD8DC"));
+        convertView.setBackgroundColor(Color.parseColor("#ffffff"));
         TextView textTitle = (TextView) convertView.findViewById(R.id.name_text);
         TextView sumTitle = (TextView) convertView.findViewById(R.id.sum_text);
         TextView dateTitle = (TextView) convertView.findViewById(R.id.date_text);
         sumTitle.setTextColor((Color.BLUE));
         dateTitle.setTextColor((Color.RED));
-        textTitle.setText(transaction.title);
-        sumTitle.setText(Integer.toString(transaction.sum));
-        dateTitle.setText(transaction.time);
+        textTitle.setText(transaction.getTitle());
+        sumTitle.setText(Integer.toString(transaction.getSum()));
+        dateTitle.setText(transaction.getTime());
         return convertView;
     }
 }
