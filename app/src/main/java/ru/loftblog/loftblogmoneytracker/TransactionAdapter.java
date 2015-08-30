@@ -30,9 +30,9 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
         TextView dateTitle = (TextView) convertView.findViewById(R.id.date_text);
         sumTitle.setTextColor((Color.BLUE));
         dateTitle.setTextColor((Color.RED));
-        textTitle.setText(transaction.title);
-        sumTitle.setText(Integer.toString(transaction.sum));
-        dateTitle.setText(transaction.time);
+        textTitle.setText(transaction.getTitle());
+        sumTitle.setText(Integer.toString(transaction.getSum()));
+        dateTitle.setText(transaction.getTime());
         return convertView;
     }
 }
