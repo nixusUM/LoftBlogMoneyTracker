@@ -2,6 +2,7 @@ package ru.loftblog.loftblogmoneytracker;
 
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
         }
     }
     private void setupDrawerLayout() {
@@ -49,18 +49,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private void selectItem(MenuItem menuItem) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         switch (menuItem.getItemId()) {
             case R.id.drawer_expenses:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ExpensesFragment()).commit();
+                fragmentTransaction.replace(R.id.frame_container, new ExpensesFragment()).addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
                 break;
             case R.id.drawer_categories:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new CategoriesFragment()).addToBackStack(null).commit();
+                fragmentTransaction.replace(R.id.frame_container, new CategoriesFragment()).addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
                 break;
             case R.id.drawer_statistics:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new StatisticsFragment()).addToBackStack(null).commit();
+                fragmentTransaction.replace(R.id.frame_container, new StatisticsFragment()).addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
                 break;
             case R.id.drawer_settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new SettingsFragment()).addToBackStack(null).commit();
+                fragmentTransaction.replace(R.id.frame_container, new SettingsFragment()).addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
                 break;
         }
     }

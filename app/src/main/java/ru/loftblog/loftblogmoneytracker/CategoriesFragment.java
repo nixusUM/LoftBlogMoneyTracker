@@ -5,17 +5,30 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class CategoriesFragment extends Fragment{
-    private TextView txtCategories;
+
+    private ListView listView;
+    private List<Transaction> data = new ArrayList<>();
+    private TransactionAdapter transactionAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.statistics_fragment, container, false);
+        View view = inflater.inflate(R.layout.expenses_fragment, container, false);
+        listView = (ListView) view.findViewById(R.id.main_listview);
+        List<Transaction> adapterData = getDataList();
         getActivity().setTitle("Категории");
-        txtCategories = (TextView) view.findViewById(R.id.txt_categories);
+        transactionAdapter = new TransactionAdapter(getActivity(), adapterData);
+        listView.setAdapter(transactionAdapter);
         return view;
+    }
+    private List<Transaction> getDataList() {
+        data.add(new Transaction("Phone", 11111, new Date()));
+        return data;
     }
 }
 
