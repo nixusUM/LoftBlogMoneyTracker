@@ -13,7 +13,6 @@ import java.util.List;
 public class CategoriesFragment extends Fragment{
 
     private ListView listView;
-    private List<Transaction> data = new ArrayList<>();
     private TransactionAdapter transactionAdapter;
 
     @Override
@@ -27,6 +26,7 @@ public class CategoriesFragment extends Fragment{
         return view;
     }
     private List<Transaction> getDataList() {
+        List<Transaction> data = new ArrayList<>();
         data.add(new Transaction("Phone", 11111, new Date()));
         return data;
     }

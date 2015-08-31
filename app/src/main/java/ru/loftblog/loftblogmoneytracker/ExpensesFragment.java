@@ -13,7 +13,6 @@ import java.util.Date;
 public class ExpensesFragment extends Fragment{
 
     private ListView listView;
-    private List<Transaction> data = new ArrayList<>();
     private TransactionAdapter transactionAdapter;
 
     @Override
@@ -27,6 +26,7 @@ public class ExpensesFragment extends Fragment{
         return view;
     }
     private List<Transaction> getDataList() {
+        List<Transaction> data = new ArrayList<>();
         data.add(new Transaction("Phone", 577, new Date()));
         data.add(new Transaction("X-Box", 999, new Date()));
         data.add(new Transaction("TV", 78, new Date()));
