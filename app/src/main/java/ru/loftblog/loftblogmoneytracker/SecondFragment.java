@@ -28,14 +28,14 @@ public class SecondFragment extends Fragment {
         return view;
     }
     private List<Transaction> getDataList() {
-        data.add(new Transaction("Phone", 577, GetDate()));
-        data.add(new Transaction("X-Box", 999, GetDate()));
-        data.add(new Transaction("TV", 78, GetDate()));
-        data.add(new Transaction("Super Car", 1150, GetDate()));
-        data.add(new Transaction("Smart Home", 7555, GetDate()));
-        data.add(new Transaction("Other things", 355, GetDate()));
-        data.add(new Transaction("Villa in San Andreas", 55555, GetDate()));
-        data.add(new Transaction("Travel", 777, GetDate()));
+        data.add(new Transaction("Phone", 577, new Date()));
+        data.add(new Transaction("X-Box", 999, new Date()));
+        data.add(new Transaction("TV", 78, new Date()));
+        data.add(new Transaction("Super Car", 1150, new Date()));
+        data.add(new Transaction("Smart Home", 7555, new Date()));
+        data.add(new Transaction("Other things", 355, new Date()));
+        data.add(new Transaction("Villa in San Andreas", 55555, new Date()));
+        data.add(new Transaction("Travel", 777, new Date()));
         return data;
     }
     private String GetDate() {
