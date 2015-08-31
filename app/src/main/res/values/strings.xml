@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">LoftBlogMoneyTracker</string>
-
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="money.tracker.title">Money Tracker</string>
+    <string name="textName">Item name</string>
+    <string name="sumName">Item price</string>
+    <string name="itemTime">Item price</string>
+    <string name="first_frame_butt">First Fragment</string>
+    <string name="second_frame_butt">Second Fragment</string>
 </resources>
