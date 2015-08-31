@@ -38,10 +38,5 @@ public class SecondFragment extends Fragment {
         data.add(new Transaction("Travel", 777, new Date()));
         return data;
     }
-    private String GetDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
-        String time =  dateFormat.format(new Date());
-        return time;
-    }
 }
 
