@@ -8,13 +8,13 @@
         android:id="@+id/name_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/textName"
+        android:text="@string/text_name"
         android:textSize="@dimen/text_items"/>
     <TextView
         android:id="@+id/sum_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sumName"
+        android:text="@string/sum_name"
         android:textSize="@dimen/text_items"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -23,6 +23,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:text="@string/itemTime"
+        android:text="@string/item_time"
         android:textSize="@dimen/text_items"/>
 </RelativeLayout>
