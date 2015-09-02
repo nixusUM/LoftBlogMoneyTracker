@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:padding="@dimen/activity_vertical_margin"
-    android:layout_height="match_parent">
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_View="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    card_View:cardBackgroundColor="@color/backGroundDark"
+    card_View:cardCornerRadius="@dimen/card_radius"
+    card_View:cardUseCompatPadding="true">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <TextView
         android:id="@+id/name_text"
         android:layout_width="wrap_content"
@@ -25,4 +32,6 @@
         android:layout_alignParentRight="true"
         android:text="@string/itemTime"
         android:textSize="@dimen/text_items"/>
-</RelativeLayout>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
+

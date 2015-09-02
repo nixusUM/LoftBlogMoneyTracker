@@ -7,4 +7,10 @@
     <dimen name="toolbar_elevation">4dp</dimen>
     <dimen name="drawer_header_height">172dp</dimen>
     <dimen name="drawer_toppadding">25dp</dimen>
+    <dimen name="card_radius">7dp</dimen>
+    <dimen name="height_drawer">56dp</dimen>
+    <dimen name="field_size">16dp</dimen>
+    <dimen name="margintop_txt">5dp</dimen>
+    <dimen name="text_size">14dp</dimen>
+    <dimen name="ava_size">70dp</dimen>
 </resources>

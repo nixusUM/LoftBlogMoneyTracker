@@ -1,33 +1,78 @@
 package ru.loftblog.loftblogmoneytracker;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class CategoriesFragment extends Fragment{
 
-    private ListView listView;
-    private TransactionAdapter transactionAdapter;
+    private ExpensesAdapter expensesAdapter;
+    List<Expense> data = new ArrayList<>();
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.expenses_fragment, container, false);
-        listView = (ListView) view.findViewById(R.id.main_listview);
-        List<Transaction> adapterData = getDataList();
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_content);
+        List<Expense> adapterData = getDataList();
+        expensesAdapter = new ExpensesAdapter(adapterData);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(expensesAdapter);
         getActivity().setTitle("Категории");
-        transactionAdapter = new TransactionAdapter(getActivity(), adapterData);
-        listView.setAdapter(transactionAdapter);
+        Snackbar.make(view, getActivity().getTitle(),
+                Snackbar.LENGTH_SHORT).setAction("Выбрано", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        }).show();
         return view;
     }
-    private List<Transaction> getDataList() {
-        List<Transaction> data = new ArrayList<>();
-        data.add(new Transaction("Phone", 11111, new Date()));
+    private List<Expense> getDataList() {
+        List<Expense> data = new ArrayList<>();
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
+        data.add(new Expense("Phone", 11111, new Date()));
         return data;
     }
 }
