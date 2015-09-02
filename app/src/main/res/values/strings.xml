@@ -14,4 +14,5 @@
     <string name="nav.drawer.settings">Настройка</string>
     <string name="name_in_drawer">Ilya Polozov</string>
     <string name="email">nlbochas@gmail.com</string>
+    <string name="click_fab_text">Нажал</string>
 </resources>
