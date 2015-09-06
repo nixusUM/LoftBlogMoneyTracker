@@ -6,7 +6,11 @@
     <string name="itemTime">Item price</string>
     <string name="txtStat">Здесь будет статистика</string>
     <string name="txtSettings">Здесь будут настройки</string>
-    <string name="txtCateg">Здесь будут категории</string>
+    <string name="summa">Сумма</string>
+    <string name="descript">Примечание</string>
+    <string name="categories">Категория</string>
+    <string name="date_input">Дата</string>
+    <string name="click_fab_text">Нажал</string>
     <!-- Строки для NavigationDrawer -->
     <string name="nav.drawer.expenses">Траты</string>
     <string name="nav.drawer.categories">Категории</string>
@@ -14,5 +18,6 @@
     <string name="nav.drawer.settings">Настройка</string>
     <string name="name_in_drawer">Ilya Polozov</string>
     <string name="email">nlbochas@gmail.com</string>
-    <string name="click_fab_text">Нажал</string>
+    <string name="today">Сегодня</string>
+    <string name="spalsh_text">LoftBlogMoneyTracker</string>
 </resources>

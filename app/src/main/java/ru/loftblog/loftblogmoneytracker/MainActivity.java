@@ -9,24 +9,30 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 
-    private DrawerLayout drawerLayout;
-    private View container;
+@EActivity(R.layout.activity_main)
+public class MainActivity extends AppCompatActivity {
+    @ViewById(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+    @ViewById(R.id.frame_container)
+    View container;
+    @ViewById(R.id.toolbar)
+    Toolbar toolbar;
+    @ViewById(R.id.navigation_view)
+    NavigationView navView;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        container = findViewById(R.id.frame_container);
-        initToolbar();
-        setupDrawerLayout();
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ExpensesFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ExpensesFragment_()).commit();
         }
     }
-    private void initToolbar() {
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    @AfterViews
+    void initToolbar(){
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -34,8 +40,9 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
-    private void setupDrawerLayout() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    @AfterViews
+    void setupDrawer() {
+                drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navView = (NavigationView) findViewById(R.id.navigation_view);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -47,19 +54,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void selectItem(MenuItem menuItem) {
+     private void selectItem(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.drawer_expenses:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ExpensesFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ExpensesFragment_()).addToBackStack(null).commit();
                 break;
             case R.id.drawer_categories:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new CategoriesFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new CategoriesFragment_()).addToBackStack(null).commit();
                 break;
             case R.id.drawer_statistics:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new StatisticsFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new StatisticsFragment_()).addToBackStack(null).commit();
                 break;
             case R.id.drawer_settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new SettingsFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new SettingsFragment_()).addToBackStack(null).commit();
                 break;
         }
     }
