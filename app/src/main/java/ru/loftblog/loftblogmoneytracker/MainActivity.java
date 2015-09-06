@@ -40,10 +40,18 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem){
+        if (menuItem.getItemId() == R.id.action_settings) {
+            return true;
+        }else if (menuItem.getItemId() == android.R.id.home) {
+            if (drawerLayout.isDrawerOpen(navView)){
+                drawerLayout.closeDrawers();
+            }else drawerLayout.openDrawer(navView);
+        } return super.onOptionsItemSelected(menuItem);
+    }
     @AfterViews
     void setupDrawer() {
-                drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        NavigationView navView = (NavigationView) findViewById(R.id.navigation_view);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
