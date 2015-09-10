@@ -18,6 +18,7 @@ public class Expense {
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -25,14 +26,17 @@ public class Expense {
     public int  getSum() {
         return sum;
     }
+
     public void setSum(int sum) {
         this.sum = sum;
     }
+
     public String getTime() {
         Date time = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(time);
         }
+
     public void setTime(Date time) {
         this.time = time;
     }

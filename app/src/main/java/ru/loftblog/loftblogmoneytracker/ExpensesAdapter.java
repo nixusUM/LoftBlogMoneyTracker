@@ -9,15 +9,19 @@ import android.widget.TextView;
 import java.util.List;
 
 public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.CardViewHolder> {
+
     List<Expense> expenses;
+
     public ExpensesAdapter(List<Expense> expenses){
         this.expenses = expenses;
     }
+
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false );
         return new CardViewHolder(itemView);
     }
+
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
         Expense expense = expenses.get(position);
@@ -25,6 +29,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.CardVi
         holder.sum.setText(String.valueOf(expense.getSum()));
         holder.date.setText(expense.getTime());
     }
+
     @Override
     public int getItemCount() {
         return expenses.size();

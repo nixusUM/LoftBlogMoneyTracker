@@ -10,6 +10,7 @@ import org.androidannotations.annotations.EFragment;
 
 @EFragment(R.layout.statistics_fragment)
 public class StatisticsFragment extends Fragment{
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().setTitle("Статистика");

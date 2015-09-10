@@ -15,12 +15,16 @@ import org.androidannotations.annotations.ViewById;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {
+
     @ViewById(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+
     @ViewById(R.id.frame_container)
     View container;
+
     @ViewById(R.id.toolbar)
     Toolbar toolbar;
+
     @ViewById(R.id.navigation_view)
     NavigationView navView;;
 
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ExpensesFragment_()).commit();
         }
     }
+
     @AfterViews
     void initToolbar(){
         setSupportActionBar(toolbar);
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem){
         if (menuItem.getItemId() == R.id.action_settings) {
@@ -50,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
             }else drawerLayout.openDrawer(navView);
         } return super.onOptionsItemSelected(menuItem);
     }
+
     @AfterViews
     void setupDrawer() {
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -62,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
      private void selectItem(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.drawer_expenses:

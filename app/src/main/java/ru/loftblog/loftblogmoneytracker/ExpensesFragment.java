@@ -15,12 +15,15 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+
 @EFragment(R.layout.expenses_fragment)
 public class ExpensesFragment extends Fragment{
-    List<Expense> data = new ArrayList<>();
+
     private ExpensesAdapter expensesAdapter;
+
     @ViewById(R.id.recycler_view_content)
     RecyclerView recyclerView;
+
     @ViewById(R.id.fab)
     FloatingActionButton fab;
 
@@ -29,6 +32,7 @@ public class ExpensesFragment extends Fragment{
         Intent openActivity = new Intent(getActivity(), AddExpenceActivity_.class);
         getActivity().startActivity(openActivity);
     }
+
     @AfterViews
     void setupList(){
         List<Expense> adapterData = getDataList();
@@ -41,6 +45,7 @@ public class ExpensesFragment extends Fragment{
         getActivity().setTitle("Траты");
         Snackbar.make(recyclerView, "Выбраны траты", Snackbar.LENGTH_SHORT).show();
     }
+
     private List<Expense> getDataList() {
         List<Expense> data = new ArrayList<>();
         data.add(new Expense("Phone", 577, new Date()));
