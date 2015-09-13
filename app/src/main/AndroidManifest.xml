@@ -3,10 +3,17 @@
     package="ru.loftblog.loftblogmoneytracker" >
 
     <application
+        android:name=".MoneyTrackerApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <meta-data android:name="AA_DB_NAME" android:value="MoneyTrackerDB.db" />
+        <meta-data android:name="AA_DB_VERSION" android:value="1" />
+        <meta-data
+            android:name="AA_MODELS"
+            android:value="ru.loftblog.loftblogmoneytracker.models.Expenses,
+            ru.loftblog.loftblogmoneytracker.models.Categories" />
         <activity
             android:name=".SplashActivity_"
             android:label="@string/spalsh_text" >

@@ -9,18 +9,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.activeandroid.query.Select;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import ru.loftblog.loftblogmoneytracker.database.models.Categories;
+
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {
+
     @ViewById(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+
     @ViewById(R.id.frame_container)
     View container;
+
     @ViewById(R.id.toolbar)
     Toolbar toolbar;
+
     @ViewById(R.id.navigation_view)
     NavigationView navView;;
 
@@ -31,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ExpensesFragment_()).commit();
         }
     }
+
     @AfterViews
     void initToolbar(){
         setSupportActionBar(toolbar);
@@ -40,9 +49,22 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
+
+    @AfterViews
+    void insertCategories() {
+        if (new Select().from(Categories.class).execute().size() == 0) {
+            new Categories("Clothes").save();
+            new Categories("Travels").save();
+            new Categories("Life").save();
+            new Categories("Food").save();
+            new Categories("Study").save();
+            new Categories("Fun").save();
+        }
+    }
+
     @AfterViews
     void setupDrawer() {
-                drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navView = (NavigationView) findViewById(R.id.navigation_view);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -54,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
      private void selectItem(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.drawer_expenses:
