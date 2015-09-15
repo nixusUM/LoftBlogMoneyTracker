@@ -6,7 +6,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
@@ -20,7 +22,7 @@ import ru.loftblog.loftblogmoneytracker.rest.RestService;
 import ru.loftblog.loftblogmoneytracker.rest.models.UserRegisterModel;
 
 @EActivity(R.layout.user_registration_layout)
-public class UserRegistration extends AppCompatActivity{
+public class UserRegistration extends AppCompatActivity {
 
     @ViewById
     EditText edLogin, edPassw;
@@ -31,7 +33,7 @@ public class UserRegistration extends AppCompatActivity{
     }
 
     @Click(R.id.regBtn)
-    void chkLogin () {
+    void chkLogin() {
         if (edLogin.getText().toString().isEmpty()) {
             edLogin.setError("Поле не должно быть пустым!");
             return;
@@ -43,27 +45,28 @@ public class UserRegistration extends AppCompatActivity{
         regSite();
     }
 
-    public boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            return true;
-        }
-        return false;
-    }
-
     @Background
     void regSite() {
-            isOnline();
+
             RestService restService = new RestService();
             UserRegisterModel response = restService.register(edLogin.getText().toString(),
                     edPassw.getText().toString());
-            if ( RegisterUserStatus.STATUS_OK.equals(response.getStatus())) {
+            if (RegisterUserStatus.STATUS_OK.equals(response.getStatus())) {
                 Intent openActivity = new Intent(this, MainActivity_.class);
                 this.startActivity(openActivity);
-            } else if ( RegisterUserStatus.STATUS_NOT_OK.equals(response.getStatus())) {
+            } else if (RegisterUserStatus.STATUS_NOT_OK.equals(response.getStatus())) {
                 Snackbar.make(findViewById(android.R.id.content), "Логин уже в системе", Snackbar.LENGTH_LONG)
+                        .setAction("Ввести другой?", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(
+                                        UserRegistration.this,
+                                        "Вводите другой логин",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        })
                         .show();
             }
-    }
+        }
 }
+
