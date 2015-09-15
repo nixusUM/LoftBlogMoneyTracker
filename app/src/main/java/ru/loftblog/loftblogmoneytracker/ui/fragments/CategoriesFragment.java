@@ -1,4 +1,4 @@
-package ru.loftblog.loftblogmoneytracker;
+package ru.loftblog.loftblogmoneytracker.ui.fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +17,8 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
+import ru.loftblog.loftblogmoneytracker.adapters.CategoriesAdapter;
+import ru.loftblog.loftblogmoneytracker.R;
 import ru.loftblog.loftblogmoneytracker.database.models.Categories;
 
 @EFragment(R.layout.categories_fragment)

@@ -1,4 +1,4 @@
-package ru.loftblog.loftblogmoneytracker;
+package ru.loftblog.loftblogmoneytracker.utils;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;

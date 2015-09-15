@@ -16,5 +16,5 @@
         android:src="@drawable/ic_add_black_24dp"
         app:layout_anchor="@id/recycler_view_content"
         app:layout_anchorGravity="bottom|right|end"
-        app:layout_behavior="ru.loftblog.loftblogmoneytracker.ScrollFABBehavior"/>
+        app:layout_behavior="ru.loftblog.loftblogmoneytracker.utils.ScrollFABBehavior"/>
 </android.support.design.widget.CoordinatorLayout>

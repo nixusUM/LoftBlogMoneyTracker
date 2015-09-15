@@ -1,4 +1,4 @@
-package ru.loftblog.loftblogmoneytracker;
+package ru.loftblog.loftblogmoneytracker.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +19,10 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
+import ru.loftblog.loftblogmoneytracker.adapters.ExpensesAdapter;
+import ru.loftblog.loftblogmoneytracker.R;
 import ru.loftblog.loftblogmoneytracker.database.models.Expenses;
+import ru.loftblog.loftblogmoneytracker.ui.activity.AddExpenceActivity_;
 
 @EFragment(R.layout.expenses_fragment)
 public class ExpensesFragment extends Fragment{

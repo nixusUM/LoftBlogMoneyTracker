@@ -1,4 +1,4 @@
-package ru.loftblog.loftblogmoneytracker;
+package ru.loftblog.loftblogmoneytracker.ui.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import ru.loftblog.loftblogmoneytracker.R;
 import ru.loftblog.loftblogmoneytracker.database.models.Expenses;
 import ru.loftblog.loftblogmoneytracker.database.models.Categories;
 
@@ -31,7 +32,7 @@ public class AddExpenceActivity extends AppCompatActivity {
     Toolbar toolbar;
 
     @ViewById
-    EditText etPrice, etDescript, etToday;
+    EditText etPrice, etDescript;
 
     @ViewById
     Spinner etCategories;
@@ -75,15 +76,17 @@ public class AddExpenceActivity extends AppCompatActivity {
     }
 
     @Click(R.id.addBtnExpence)
-    public void addExpenceButton() {
+    void addExpenceButton() {
+
         if (etPrice.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Нужно ввести сумму!", Toast.LENGTH_SHORT).show();
+            etPrice.setError("Поле не должно быть пустым!" );
             return;
         }
         if (etDescript.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Нужно ввести примечание!", Toast.LENGTH_SHORT).show();
+            etDescript.setError("Поле не должно быть пустым!" );
             return;
         }
+
         new Expenses(etPrice.getText().toString(), etDescript.getText().toString(), getToday(), (Categories)etCategories.getSelectedItem()).save();
         Toast.makeText(this, "Запись с примечанием " + etDescript.getText().toString() + " добавлена!", Toast.LENGTH_SHORT).show();
     }

@@ -21,4 +21,9 @@
     <string name="email">nlbochas@gmail.com</string>
     <string name="today">Сегодня</string>
     <string name="spalsh_text">LoftBlogMoneyTracker</string>
+    <string name="regBtn">ВОЙТИ</string>
+    <string name="usrRegAct">UserRegAcrivity</string>
+    <string name="inputPass">Введите пароль</string>
+    <string name="inputLogin">Введите логин</string>
+    <string name="headRegAct">Введите данные пользователя</string>
 </resources>
