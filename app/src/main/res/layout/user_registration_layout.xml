@@ -45,6 +45,4 @@
         android:layout_below="@+id/edPassw"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/regAct_btn_margin" />
-
-
 </RelativeLayout>

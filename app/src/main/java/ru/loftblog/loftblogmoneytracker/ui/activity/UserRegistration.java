@@ -42,7 +42,17 @@ public class UserRegistration extends AppCompatActivity {
             edPassw.setError("Поле не должно быть пустым!");
             return;
         }
-        regSite();
+        if (isOnline()) {
+            regSite();
+        } else {
+            Toast.makeText(this, "Проверьте подключение к интернету", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     @Background
