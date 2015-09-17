@@ -23,7 +23,7 @@
             android:layout_column="0" />
         <EditText
             android:id="@+id/etPrice"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="fill"
