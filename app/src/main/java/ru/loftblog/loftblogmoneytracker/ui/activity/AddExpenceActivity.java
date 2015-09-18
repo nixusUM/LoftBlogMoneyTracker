@@ -16,14 +16,15 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.res.StringRes;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import ru.loftblog.loftblogmoneytracker.R;
-import ru.loftblog.loftblogmoneytracker.database.models.Expenses;
 import ru.loftblog.loftblogmoneytracker.database.models.Categories;
+import ru.loftblog.loftblogmoneytracker.database.models.Expenses;
 
 @EActivity(R.layout.activity_add_expence)
 public class AddExpenceActivity extends AppCompatActivity {
@@ -36,6 +37,9 @@ public class AddExpenceActivity extends AppCompatActivity {
 
     @ViewById
     Spinner etCategories;
+
+    @StringRes
+    String etTextEmpty;
 
     @OptionsItem(android.R.id.home)
     void back() {
@@ -79,11 +83,11 @@ public class AddExpenceActivity extends AppCompatActivity {
     void addExpenceButton() {
 
         if (etPrice.getText().toString().isEmpty()) {
-            etPrice.setError("Поле не должно быть пустым!" );
+            etPrice.setError(etTextEmpty);
             return;
         }
         if (etDescript.getText().toString().isEmpty()) {
-            etDescript.setError("Поле не должно быть пустым!" );
+            etDescript.setError(etTextEmpty);
             return;
         }
 

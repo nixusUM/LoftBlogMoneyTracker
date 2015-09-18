@@ -12,6 +12,12 @@
     <string name="date_input">Дата</string>
     <string name="click_fab_text">Нажал</string>
     <string name="add_btn_txt">Добавить запись</string>
+    <!-- Строики в авторизации -->
+    <string name="etTextEmpty">Поле не должно быть пустым!</string>
+    <string name="logText">Логин уже в системе</string>
+    <string name="entAnoth">Ввести другой</string>
+    <string name="entAnothlogin">Вводите другой логин</string>
+    <string name="checkInternet">"Ошибка подключение к интернету"</string>
     <!-- Строки для NavigationDrawer -->
     <string name="nav.drawer.expenses">Траты</string>
     <string name="nav.drawer.categories">Категории</string>
