@@ -1,9 +1,11 @@
 package ru.loftblog.loftblogmoneytracker.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,7 +26,7 @@ import ru.loftblog.loftblogmoneytracker.utils.CheckNetworkConnection;
 public class UserRegistration extends AppCompatActivity {
 
     @ViewById
-    EditText edLogin, edPassw;
+    EditText edRegister, edRegPassw;
 
     @StringRes
     String etTextEmpty, logText, entAnoth, entAnothlogin, checkInternet;
@@ -36,6 +38,7 @@ public class UserRegistration extends AppCompatActivity {
 
     @Click(R.id.regBtn)
     void chkLogin() {
+        hideKeyboard();
         if (inputCheck())
             if (CheckNetworkConnection.isOnline(this)) {
                 regSite();
@@ -48,26 +51,34 @@ public class UserRegistration extends AppCompatActivity {
 
         boolean check = true;
 
-        if (edLogin.getText().toString().isEmpty()) {
-            edLogin.setError(etTextEmpty);
+        if (edRegister.getText().toString().isEmpty()) {
+            edRegister.setError(etTextEmpty);
             check = false;
         }
-        if (edPassw.getText().toString().isEmpty()) {
-            edPassw.setError(etTextEmpty);
+        if (edRegPassw.getText().toString().isEmpty()) {
+            edRegPassw.setError(etTextEmpty);
             check = false;
         }
         return check;
     }
 
+    private void hideKeyboard() {
+        View view = getCurrentFocus();
+        if (view != null) {
+            ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
+                    hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
     @Background
     void regSite() {
             RestService restService = new RestService();
-            UserRegisterModel response = restService.register(edLogin.getText().toString(),
-                    edPassw.getText().toString());
-            if (RegisterUserStatus.STATUS_OK.equals(response.getStatus())) {
-                Intent openActivity = new Intent(this, MainActivity_.class);
+            UserRegisterModel register = restService.register(edRegister.getText().toString(),
+                    edRegPassw.getText().toString());
+            if (RegisterUserStatus.STATUS_OK.equals(register.getStatus())) {
+                Intent openActivity = new Intent(this, LoginActivity_.class);
                 this.startActivity(openActivity);
-            } else if (RegisterUserStatus.STATUS_NOT_OK.equals(response.getStatus())) {
+            } else if (RegisterUserStatus.STATUS_NOT_OK.equals(register.getStatus())) {
                 Snackbar.make(findViewById(android.R.id.content), logText, Snackbar.LENGTH_LONG)
                         .setAction(entAnoth, new View.OnClickListener() {
                             @Override
@@ -80,6 +91,12 @@ public class UserRegistration extends AppCompatActivity {
                         })
                         .show();
             }
+    }
+
+    @Click(R.id.logToActiv)
+    void regActivityOpen() {
+        Intent openRegAct = new Intent(this, LoginActivity_.class);
+        this.startActivity(openRegAct);
     }
 }
 

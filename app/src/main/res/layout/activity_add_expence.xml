@@ -92,8 +92,10 @@
             android:id="@+id/addBtnExpence"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/button_rounded_all"
+            android:padding="@dimen/text_items"
             android:text="@string/add_btn_txt"
-            android:layout_marginTop="@dimen/padding_field"
+            android:layout_marginTop="@dimen/regAct_btn_margin"
             android:layout_gravity="center_horizontal"
             android:layout_row="4"
             android:layout_column="1" />

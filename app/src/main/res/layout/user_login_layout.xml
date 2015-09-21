@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@style/Container.Background">
     <include layout="@layout/toolbar"
@@ -10,55 +11,54 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/titleRegister"
-        android:id="@+id/txtPassword"
+        android:text="@string/headRegAct"
+        android:id="@+id/txtLogin"
         android:layout_below="@+id/include"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/marginLoginTxt" />
 
     <EditText
-        android:id="@+id/edRegister"
+        android:id="@+id/edLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:hint="@string/inputLogin"
         android:ems="10"
         android:layout_marginTop="@dimen/marginLoginEd"
-        android:layout_below="@+id/txtPassword"
+        android:layout_below="@+id/txtLogin"
         android:layout_centerHorizontal="true" />
 
     <EditText
-        android:id="@+id/edRegPassw"
+        android:id="@+id/edLoginPassw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:hint="@string/inputPass"
         android:ems="10"
-        android:layout_below="@+id/edRegister"
-        android:layout_alignLeft="@+id/edRegister"
-        android:layout_alignStart="@+id/edRegister" />
+        android:layout_below="@+id/edLogin"
+        android:layout_alignLeft="@+id/edLogin"
+        android:layout_alignStart="@+id/edLogin" />
 
     <Button
-        android:id="@+id/regBtn"
+        android:id="@+id/loginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:background="@drawable/button_rounded_all"
-        android:padding="@dimen/padding_field"
+        android:text="@string/loginButton"
+        android:layout_marginTop="@dimen/regAct_btn_margin"
+        android:layout_below="@+id/edLoginPassw"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/regToActiv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:background="@drawable/button_rounded_all"
         android:text="@string/registerButton"
-        android:layout_below="@+id/edRegPassw"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/regAct_btn_margin" />
-
-    <Button
-        android:id="@+id/logToActiv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:background="@drawable/button_rounded_all"
-        android:text="@string/logBtnActivity"
         android:padding="@dimen/text_items"
-        android:layout_below="@+id/regBtn"
+        android:layout_below="@+id/loginBtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/field_size" />
 </RelativeLayout>
