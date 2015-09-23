@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/Container.Background">
+    <include layout="@layout/toolbar"
+        android:id="@+id/include" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/headRegAct"
+        android:id="@+id/textView4"
+        android:layout_below="@+id/include"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/edLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="@string/inputLogin"
+        android:ems="10"
+        android:layout_marginTop="@dimen/regAct_loginTxt_magin"
+        android:layout_below="@+id/textView4"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/edPassw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="@string/inputPass"
+        android:ems="10"
+        android:layout_below="@+id/edLogin"
+        android:layout_alignLeft="@+id/edLogin"
+        android:layout_alignStart="@+id/edLogin" />
+
+    <Button
+        android:id="@+id/regBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/regBtn"
+        android:layout_below="@+id/edPassw"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/regAct_btn_margin" />
+</RelativeLayout>
