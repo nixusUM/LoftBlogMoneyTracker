@@ -1,4 +1,4 @@
-package ru.loftblog.loftblogmoneytracker.rest;
+package ru.loftblog.loftblogmoneytracker.utils.checks;
 
 public class RegisterUserStatus {
 

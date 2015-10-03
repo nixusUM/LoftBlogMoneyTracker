@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OptionsItem;
@@ -17,10 +18,11 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
 
 import ru.loftblog.loftblogmoneytracker.R;
-import ru.loftblog.loftblogmoneytracker.rest.RegisterUserStatus;
 import ru.loftblog.loftblogmoneytracker.rest.RestService;
 import ru.loftblog.loftblogmoneytracker.rest.models.UserRegisterModel;
-import ru.loftblog.loftblogmoneytracker.utils.CheckNetworkConnection;
+import ru.loftblog.loftblogmoneytracker.utils.checks.CheckNetworkConnection;
+import ru.loftblog.loftblogmoneytracker.utils.checks.CheckUserInput_;
+import ru.loftblog.loftblogmoneytracker.utils.checks.RegisterUserStatus;
 
 @EActivity(R.layout.user_registration_layout)
 public class UserRegistration extends AppCompatActivity {
@@ -31,6 +33,12 @@ public class UserRegistration extends AppCompatActivity {
     @StringRes
     String etTextEmpty, logText, entAnoth, entAnothlogin, checkInternet;
 
+    @Bean
+    CheckNetworkConnection chkConnect;
+
+    @Bean
+    CheckUserInput_ checkUserInput;
+
     @OptionsItem(android.R.id.home)
     void back() {
         onBackPressed();
@@ -39,27 +47,13 @@ public class UserRegistration extends AppCompatActivity {
     @Click(R.id.regBtn)
     void chkLogin() {
         hideKeyboard();
-        if (inputCheck())
+        if (checkUserInput.inputCheck(edRegister, edRegPassw)) {
             if (CheckNetworkConnection.isOnline(this)) {
                 regSite();
             } else {
                 Toast.makeText(this, checkInternet, Toast.LENGTH_SHORT).show();
             }
-    }
-
-    private boolean inputCheck() {
-
-        boolean check = true;
-
-        if (edRegister.getText().toString().isEmpty()) {
-            edRegister.setError(etTextEmpty);
-            check = false;
         }
-        if (edRegPassw.getText().toString().isEmpty()) {
-            edRegPassw.setError(etTextEmpty);
-            check = false;
-        }
-        return check;
     }
 
     private void hideKeyboard() {

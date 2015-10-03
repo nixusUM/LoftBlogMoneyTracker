@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OptionsItem;
@@ -20,13 +21,16 @@ import ru.loftblog.loftblogmoneytracker.MoneyTrackerApp;
 import ru.loftblog.loftblogmoneytracker.R;
 import ru.loftblog.loftblogmoneytracker.rest.RestService;
 import ru.loftblog.loftblogmoneytracker.rest.models.UserLoginModel;
-import ru.loftblog.loftblogmoneytracker.utils.CheckNetworkConnection;
+import ru.loftblog.loftblogmoneytracker.utils.checks.CheckNetworkConnection;
+import ru.loftblog.loftblogmoneytracker.utils.checks.CheckNetworkConnection_;
+import ru.loftblog.loftblogmoneytracker.utils.checks.CheckUserInput_;
 
-import static ru.loftblog.loftblogmoneytracker.rest.LoginUserStatus.ANOTHER_ERROR;
-import static ru.loftblog.loftblogmoneytracker.rest.LoginUserStatus.STATUS_OK;
-import static ru.loftblog.loftblogmoneytracker.rest.LoginUserStatus.WRONG_LOGIN;
-import static ru.loftblog.loftblogmoneytracker.rest.LoginUserStatus.WRONG_PASSWORD;
-import static ru.loftblog.loftblogmoneytracker.rest.LoginUserStatus.WRONG_TOKEN;
+import static ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus.ANOTHER_ERROR;
+import static ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus.STATUS_OK;
+import static ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus.WRONG_LOGIN;
+import static ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus.WRONG_PASSWORD;
+import static ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus.WRONG_TOKEN;
+
 
 @EActivity(R.layout.user_login_layout)
 public class LoginActivity extends AppCompatActivity{
@@ -37,7 +41,13 @@ public class LoginActivity extends AppCompatActivity{
     EditText edLogin, edLoginPassw;
 
     @StringRes
-    String etTextEmpty, entAnothlogin, entAnoth, errLogin, errPassword, tokenError, anotherError, checkInternet;
+    String entAnothlogin, entAnoth, errLogin, errPassword, tokenError, anotherError, checkInternet;
+
+    @Bean
+    CheckNetworkConnection_ chkConnect;
+
+    @Bean
+    CheckUserInput_ checkUserInput;
 
     @OptionsItem(android.R.id.home)
     void back() {
@@ -47,27 +57,13 @@ public class LoginActivity extends AppCompatActivity{
     @Click(R.id.loginBtn)
     void chkLogin() {
         hideKeyboard();
-        if (inputCheck())
+        if (checkUserInput.inputCheck(edLogin, edLoginPassw)) {
             if (CheckNetworkConnection.isOnline(this)) {
                 regSite();
             } else {
                 Toast.makeText(this, checkInternet, Toast.LENGTH_SHORT).show();
             }
-    }
-
-    private boolean inputCheck() {
-
-        boolean check = true;
-
-        if (edLogin.getText().toString().isEmpty()) {
-            edLogin.setError(etTextEmpty);
-            check = false;
         }
-        if (edLoginPassw.getText().toString().isEmpty()) {
-            edLoginPassw.setError(etTextEmpty);
-            check = false;
-        }
-        return check;
     }
 
     private void hideKeyboard() {

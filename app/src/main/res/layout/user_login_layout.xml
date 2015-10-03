@@ -46,7 +46,7 @@
         android:textColor="@color/white"
         android:background="@drawable/button_rounded_all"
         android:text="@string/loginButton"
-        android:layout_marginTop="@dimen/regAct_btn_margin"
+        android:layout_marginTop="46dp"
         android:layout_below="@+id/edLoginPassw"
         android:layout_centerHorizontal="true" />
 
@@ -60,5 +60,6 @@
         android:padding="@dimen/text_items"
         android:layout_below="@+id/loginBtn"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/field_size" />
+        android:layout_marginTop="@dimen/act_add_txt" />
+
 </RelativeLayout>

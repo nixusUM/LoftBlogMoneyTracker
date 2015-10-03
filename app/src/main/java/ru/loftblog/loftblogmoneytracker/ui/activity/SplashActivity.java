@@ -13,7 +13,7 @@ import ru.loftblog.loftblogmoneytracker.R;
 @EActivity(R.layout.splash_activity)
 public class SplashActivity extends AppCompatActivity {
 
-    private static int SPLASH_TIME_OUT = 2000;
+    private static int SPLASH_TIME_OUT = 1500;
 
     @AfterViews
     void showSpalsh() {
