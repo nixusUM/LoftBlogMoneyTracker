@@ -31,7 +31,7 @@ public class UserRegistration extends AppCompatActivity {
     EditText edRegister, edRegPassw;
 
     @StringRes
-    String etTextEmpty, logText, entAnoth, entAnothlogin, checkInternet;
+    String  logText, entAnoth, entAnothlogin, checkInternet;
 
     @Bean
     CheckNetworkConnection chkConnect;
