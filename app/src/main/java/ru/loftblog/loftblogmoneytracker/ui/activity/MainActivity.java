@@ -6,29 +6,33 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.activeandroid.query.Select;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
-import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.List;
+
+import ru.loftblog.loftblogmoneytracker.MoneyTrackerApp;
 import ru.loftblog.loftblogmoneytracker.R;
+import ru.loftblog.loftblogmoneytracker.database.models.Categories;
+import ru.loftblog.loftblogmoneytracker.rest.RestService;
+import ru.loftblog.loftblogmoneytracker.rest.models.AddCategoryModel;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.CategoriesFragment_;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.ExpensesFragment_;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.SettingsFragment_;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.StatisticsFragment_;
-import ru.loftblog.loftblogmoneytracker.utils.GetCategories;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "MainActivity";
-
-    @Bean
-    GetCategories getCategoties;
 
     @ViewById(R.id.drawer_layout)
     DrawerLayout drawerLayout;
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        createCategories();
+        sendToSiteCategories();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ExpensesFragment_()).commit();
         }
@@ -72,10 +76,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Background
-    public void createCategories() {
-            getCategoties.fromSite(this);
+    @AfterViews
+    void insertCategories() {
+        if (new Select().from(Categories.class).execute().size() == 0) {
+            new Categories("Clothes").save();
+            new Categories("Travels").save();
+            new Categories("Life").save();
+            new Categories("Food").save();
+            new Categories("Study").save();
+            new Categories("Fun").save();
         }
+    }
+
+    @Background
+    public void sendToSiteCategories() {
+        RestService restService = new RestService();
+        AddCategoryModel categoryAdd = null;
+        List<Categories> categoriesList = new Select().from(Categories.class).execute();
+        for (Categories category : categoriesList) {
+            categoryAdd = restService.addCategory(category.title, MoneyTrackerApp.getToken(this));
+            Log.d(LOG_TAG, "sendToSiteCategories " + categoryAdd.getCategoryAdd().getTitle());
+        }
+
+    }
 
     @AfterViews
     void setupDrawer() {

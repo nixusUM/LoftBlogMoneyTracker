@@ -21,7 +21,7 @@ import ru.loftblog.loftblogmoneytracker.R;
 import ru.loftblog.loftblogmoneytracker.rest.RestService;
 import ru.loftblog.loftblogmoneytracker.rest.models.UserRegisterModel;
 import ru.loftblog.loftblogmoneytracker.utils.checks.CheckNetworkConnection;
-import ru.loftblog.loftblogmoneytracker.utils.checks.CheckUserInput_;
+import ru.loftblog.loftblogmoneytracker.utils.checks.CheckUserInput;
 import ru.loftblog.loftblogmoneytracker.utils.checks.RegisterUserStatus;
 
 @EActivity(R.layout.user_registration_layout)
@@ -37,7 +37,7 @@ public class UserRegistration extends AppCompatActivity {
     CheckNetworkConnection chkConnect;
 
     @Bean
-    CheckUserInput_ checkUserInput;
+    CheckUserInput checkUserInput;
 
     @OptionsItem(android.R.id.home)
     void back() {
