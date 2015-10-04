@@ -11,13 +11,26 @@
     <string name="categories">Категория</string>
     <string name="date_input">Дата</string>
     <string name="click_fab_text">Нажал</string>
-    <string name="add_btn_txt">Добавить запись</string>
-    <!-- Строики в авторизации -->
+    <string name="add_btn_txt">Добавить трату</string>
+    <!-- Строики в авторизации и регистрации -->
     <string name="etTextEmpty">Поле не должно быть пустым!</string>
-    <string name="logText">Логин уже в системе</string>
-    <string name="entAnoth">Ввести другой</string>
+    <string name="logText">Логин занят</string>
+    <string name="entAnoth">Перейти к авторизации?</string>
+    <string name="usrRegAct">UserRegAcrivity</string>
+    <string name="loginAct">LoginActivity</string>
+    <string name="tokenError">Token Error</string>
+    <string name="inputPass">Введите пароль</string>
+    <string name="inputLogin">Введите логин</string>
+    <string name="headRegAct">Введите данные пользователя</string>
     <string name="entAnothlogin">Вводите другой логин</string>
-    <string name="checkInternet">"Ошибка подключение к интернету"</string>
+    <string name="errLogin">Неверный логин</string>
+    <string name="errPassword">Неверный пароль</string>
+    <string name="anotherError">Error!</string>
+    <string name="checkInternet">Ошибка подключение к интернету</string>
+    <string name="registerButton">Зарегистрироваться</string>
+    <string name="logBtnActivity">Уже есть логин?</string>
+    <string name="titleRegister">РЕГИСТРАЦИЯ</string>
+    <string name="loginButton">Войти</string>
     <!-- Строки для NavigationDrawer -->
     <string name="nav.drawer.expenses">Траты</string>
     <string name="nav.drawer.categories">Категории</string>
@@ -27,11 +40,6 @@
     <string name="email">nlbochas@gmail.com</string>
     <string name="today">Сегодня</string>
     <string name="spalsh_text">LoftBlogMoneyTracker</string>
-    <string name="regBtn">ВОЙТИ</string>
-    <string name="usrRegAct">UserRegAcrivity</string>
-    <string name="inputPass">Введите пароль</string>
-    <string name="inputLogin">Введите логин</string>
-    <string name="headRegAct">Введите данные пользователя</string>
     <string name="text_name">Item name</string>
     <string name="sum_name">Item price</string>
     <string name="item_time">Item price</string>

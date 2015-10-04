@@ -19,4 +19,6 @@
     <dimen name="add_button_padding">25dp</dimen>
     <dimen name="regAct_loginTxt_magin">97dp</dimen>
     <dimen name="regAct_btn_margin">59dp</dimen>
+    <dimen name="marginLoginTxt">65dp</dimen>
+    <dimen name="marginLoginEd">59dp</dimen>
 </resources>
