@@ -21,4 +21,7 @@
     <dimen name="regAct_btn_margin">59dp</dimen>
     <dimen name="marginLoginTxt">65dp</dimen>
     <dimen name="marginLoginEd">59dp</dimen>
+    <!-- Login, Registration btn sizes. -->
+    <dimen name="loginBtn_width">200dp</dimen>
+    <dimen name="loginBtn_height">40dp</dimen>
 </resources>

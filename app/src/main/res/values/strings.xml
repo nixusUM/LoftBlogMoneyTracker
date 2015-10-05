@@ -45,4 +45,5 @@
     <string name="item_time">Item price</string>
     <string name="first_frame_butt">First Fragment</string>
     <string name="second_frame_butt">Second Fragment</string>
+    <string name="checkGoogle">checkGoogle</string>
 </resources>

@@ -1,13 +1,20 @@
 package ru.loftblog.loftblogmoneytracker.ui.activity;
 
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.android.gms.common.AccountPicker;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
@@ -16,6 +23,8 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
+
+import java.io.IOException;
 
 import ru.loftblog.loftblogmoneytracker.MoneyTrackerApp;
 import ru.loftblog.loftblogmoneytracker.R;
@@ -32,9 +41,17 @@ import static ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus.WRON
 
 
 @EActivity(R.layout.user_login_layout)
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
+
+    private final static String G_PLUS_SCOPE =
+            "oauth2:https://www.googleapis.com/auth/plus.me";
+    private final static String USERINFO_SCOPE =
+            "https://www.googleapis.com/auth/userinfo.profile";
+    private final static String EMAIL_SCOPE =
+            "https://www.googleapis.com/auth/userinfo.email";
+    public final static String SCOPES = G_PLUS_SCOPE + " " + USERINFO_SCOPE + " " + EMAIL_SCOPE;
 
     @ViewById
     EditText edLogin, edLoginPassw;
@@ -67,10 +84,10 @@ public class LoginActivity extends AppCompatActivity{
 
     private void hideKeyboard() {
         View view = getCurrentFocus();
-            if (view != null) {
-                ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
-                        hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            }
+        if (view != null) {
+            ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
+                    hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
     @Background
@@ -79,7 +96,7 @@ public class LoginActivity extends AppCompatActivity{
         UserLoginModel login = restService.login(edLogin.getText().toString(),
                 edLoginPassw.getText().toString());
 
-        MoneyTrackerApp.setToken(this,login.getAuthToken());
+        MoneyTrackerApp.setToken(this, login.getAuthToken());
         try {
             if (STATUS_OK.equals(login.getStatus())) {
                 Intent openActivity = new Intent(this, MainActivity_.class);
@@ -109,11 +126,41 @@ public class LoginActivity extends AppCompatActivity{
         }
     }
 
-    @Click(R.id.regToActiv)
-    void regActivityOpen() {
-        Intent openRegAct = new Intent(this, UserRegistration_.class);
-        this.startActivity(openRegAct);
+    @Click(R.id.sign_in_button)
+    void doubleTokenCheck() {
+        Intent intent = AccountPicker.newChooseAccountIntent(null, null,
+        new String[]{"com.google"}, false, null, null, null, null);
+        startActivityForResult(intent, 123);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 123 && resultCode == RESULT_OK) {
+            getToken(data);
+        }
+    }
+
+    @Background
+    void getToken(Intent data) {
+        String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+        String token = null;
+        try {
+            token = GoogleAuthUtil.getToken(LoginActivity.this, accountName, SCOPES);
+        } catch (IOException | GoogleAuthException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(LOG_TAG, "WTF? " + token);
+
+//        MoneyTrackerApp.setToken(this, googleToken);
+//        String googleSharedToken = MoneyTrackerApp.getGoogleToken(this);
+//
+//        Intent intent = new Intent(this, MainActivity_.class);
+//        startActivity(intent);
+//        finish();
+    }
+
 }
+
 
 
