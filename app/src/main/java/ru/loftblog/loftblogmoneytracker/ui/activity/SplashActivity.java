@@ -2,6 +2,7 @@ package ru.loftblog.loftblogmoneytracker.ui.activity;
 
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,6 +28,7 @@ import ru.loftblog.loftblogmoneytracker.MoneyTrackerApp;
 import ru.loftblog.loftblogmoneytracker.R;
 import ru.loftblog.loftblogmoneytracker.rest.RestClient;
 import ru.loftblog.loftblogmoneytracker.rest.models.GoogleWorkModel;
+import ru.loftblog.loftblogmoneytracker.sync.TrackerSyncAdapter;
 import ru.loftblog.loftblogmoneytracker.utils.checks.CheckNetworkConnection;
 import ru.loftblog.loftblogmoneytracker.utils.checks.GoogleScopes;
 
@@ -45,6 +47,12 @@ public class SplashActivity extends AppCompatActivity implements GoogleScopes {
     private RestClient restClient;
     private String googleToken;
     private String token;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        TrackerSyncAdapter.initializeSyncAdapter(this);
+    }
 
     @AfterViews
     void showSpalsh() {
@@ -67,18 +75,19 @@ public class SplashActivity extends AppCompatActivity implements GoogleScopes {
         }
     }
 
+// Явно пытался уже указать ему проверить
+    
     @Background
     void checkTokenValid() {
         restClient.getGoogleWorkAPI().tokenStatus(googleToken, new Callback<GoogleWorkModel>() {
             @Override
             public void success(GoogleWorkModel googleWorkModel, Response response) {
-                    Log.d(TAG, "STATUS" + googleWorkModel.getTokenStatus());
-                    if (googleWorkModel.getTokenStatus().equals("success")) {
+                    if (googleWorkModel.getTokenStatus().equalsIgnoreCase("Error")) {
+                        doubleTokenCheck();
+                    } else {
                         Intent intent = new Intent(SplashActivity.this, MainActivity_.class);
                         startActivity(intent);
                         finish();
-                    } else {
-                        doubleTokenCheck();
                     }
                 }
 

@@ -46,4 +46,6 @@
     <string name="first_frame_butt">First Fragment</string>
     <string name="second_frame_butt">Second Fragment</string>
     <string name="checkGoogle">checkGoogle</string>
+    <string name="content_authority">ru.loftblog.loftblogmoneytracker</string>
+    <string name="sync_account_type">loftblogmoneytracker.loftblog.ru</string>
 </resources>

@@ -110,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
         for (Categories category : categoriesList) {
             categoryAdd = restService.addCategory(category.title, MoneyTrackerApp.getGoogleToken(this)
                     ,MoneyTrackerApp.getToken(this));
-            Log.d(LOG_TAG, "sendToSiteCategories " + categoryAdd.getCategoryAdd().getTitle());
         }
     }
 

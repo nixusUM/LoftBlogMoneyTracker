@@ -1,6 +1,9 @@
 package ru.loftblog.loftblogmoneytracker.rest.api;
 
+import java.util.List;
+
 import retrofit.http.GET;
+import retrofit.http.POST;
 import retrofit.http.Query;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategoryWorkModel;
 
@@ -18,7 +21,11 @@ public interface CategoryWorkAPI {
     CategoryWorkModel rmCategories (@Query("id") int id);
 
     @GET("/categories")
-    CategoryWorkModel allCategories (@Query("google_token") String gToken,
-                                    @Query("auth_token") String token);
+    CategoryWorkModel getAllCategories (@Query("google_token") String gToken,
+                                        @Query("auth_token") String token);
+
+    @POST("/categories/sync")
+    List<CategoryWorkModel> syncCategories(@Query("id") long id,
+                                           @Query("title") String title);
 }
 

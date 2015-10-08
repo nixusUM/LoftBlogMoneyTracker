@@ -1,5 +1,7 @@
 package ru.loftblog.loftblogmoneytracker.rest;
 
+import java.util.List;
+
 import ru.loftblog.loftblogmoneytracker.rest.models.CategoryWorkModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.GoogleWorkModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.UserLoginModel;
@@ -26,8 +28,16 @@ public class RestService {
     public CategoryWorkModel addCategory (String title, String gToken, String token) {
         return restClient.getCategoryAPI().addCategory(title, gToken, token);
     }
+//
+//    public CategoryWorkModel getAllCategories (String gToken, String token) {
+//        return restClient.getCategoryAPI().getAllCategories(gToken, token);
+//    }
 
     public GoogleWorkModel workGoogle (String gToken) {
         return restClient.getGoogleWorkAPI().googleJson(gToken);
+    }
+
+    public List<CategoryWorkModel> syncCategory(long id, String title) {
+        return restClient.getCategoryAPI().syncCategories(id, title);
     }
 }
