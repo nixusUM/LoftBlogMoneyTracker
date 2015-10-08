@@ -32,6 +32,7 @@ import ru.loftblog.loftblogmoneytracker.rest.RestService;
 import ru.loftblog.loftblogmoneytracker.rest.models.UserLoginModel;
 import ru.loftblog.loftblogmoneytracker.utils.checks.CheckNetworkConnection;
 import ru.loftblog.loftblogmoneytracker.utils.checks.CheckUserInput;
+import ru.loftblog.loftblogmoneytracker.utils.checks.GoogleScopes;
 
 import static ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus.ANOTHER_ERROR;
 import static ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus.STATUS_OK;
@@ -41,17 +42,9 @@ import static ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus.WRON
 
 
 @EActivity(R.layout.user_login_layout)
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements GoogleScopes{
 
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
-
-    private final static String G_PLUS_SCOPE =
-            "oauth2:https://www.googleapis.com/auth/plus.me";
-    private final static String USERINFO_SCOPE =
-            "https://www.googleapis.com/auth/userinfo.profile";
-    private final static String EMAIL_SCOPE =
-            "https://www.googleapis.com/auth/userinfo.email";
-    public final static String SCOPES = G_PLUS_SCOPE + " " + USERINFO_SCOPE + " " + EMAIL_SCOPE;
 
     @ViewById
     EditText edLogin, edLoginPassw;
@@ -127,40 +120,53 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Click(R.id.sign_in_button)
-    void doubleTokenCheck() {
-        Intent intent = AccountPicker.newChooseAccountIntent(null, null,
-        new String[]{"com.google"}, false, null, null, null, null);
-        startActivityForResult(intent, 123);
+    void googleWork() {
+        if (chkConnect.isOnline(this)) {
+            Intent googleIntent = AccountPicker.newChooseAccountIntent(null, null,
+                    new String[]{"com.google"}, false, null, null, null, null);
+            startActivityForResult(googleIntent, 11);
+        } else Toast.makeText(this, checkInternet, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 123 && resultCode == RESULT_OK) {
-            getToken(data);
+        if (requestCode == 11 && resultCode == RESULT_OK) {
+            getGoogleToken(data);
         }
     }
 
     @Background
-    void getToken(Intent data) {
-        String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-        String token = null;
+    void getGoogleToken(Intent data) {
+        final String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+        String googleToken = null;
         try {
-            token = GoogleAuthUtil.getToken(LoginActivity.this, accountName, SCOPES);
-        } catch (IOException | GoogleAuthException e) {
+            googleToken = GoogleAuthUtil.getToken(LoginActivity.this, accountName, SCOPES);
+        } catch (IOException e) {
+        } catch (final UserRecoverableAuthException e) {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    startActivityForResult(e.getIntent(), 21);
+                }
+            });
+        } catch (GoogleAuthException e) {
             e.printStackTrace();
         }
 
-        Log.d(LOG_TAG, "WTF? " + token);
+        MoneyTrackerApp.setGoogleToken(LoginActivity.this, googleToken);
+        String googleShToken = MoneyTrackerApp.getGoogleToken(LoginActivity.this);
 
-//        MoneyTrackerApp.setToken(this, googleToken);
-//        String googleSharedToken = MoneyTrackerApp.getGoogleToken(this);
-//
-//        Intent intent = new Intent(this, MainActivity_.class);
-//        startActivity(intent);
-//        finish();
+        if (!googleShToken.equals("2")) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity_.class);
+            startActivity(intent);
+            finish();
+            Log.d(LOG_TAG, "key? " + googleShToken);
+        }
     }
-
 }
+
+
+
+
 
 
 

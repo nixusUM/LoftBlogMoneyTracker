@@ -3,7 +3,7 @@ package ru.loftblog.loftblogmoneytracker.rest.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class AddCategoryModel {
+public class CategoryWorkModel {
 
     @SerializedName("status")
     @Expose

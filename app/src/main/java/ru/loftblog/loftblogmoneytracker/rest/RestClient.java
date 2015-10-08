@@ -1,7 +1,8 @@
 package ru.loftblog.loftblogmoneytracker.rest;
 
 import retrofit.RestAdapter;
-import ru.loftblog.loftblogmoneytracker.rest.api.AddCategoryAPI;
+import ru.loftblog.loftblogmoneytracker.rest.api.CategoryWorkAPI;
+import ru.loftblog.loftblogmoneytracker.rest.api.GoogleWorkAPI;
 import ru.loftblog.loftblogmoneytracker.rest.api.LoginUserAPI;
 import ru.loftblog.loftblogmoneytracker.rest.api.RegisterUserAPI;
 
@@ -13,9 +14,11 @@ public class RestClient {
 
     private LoginUserAPI loginUserAPI;
 
-    private AddCategoryAPI addCategoryAPI;
+    private CategoryWorkAPI categoryWorkAPI;
 
-    RestClient() {
+    private GoogleWorkAPI googleWorkAPI;
+
+    public RestClient() {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setEndpoint(BASE_URL)
@@ -23,7 +26,8 @@ public class RestClient {
 
         registerUserAPI = restAdapter.create(RegisterUserAPI.class);
         loginUserAPI = restAdapter.create(LoginUserAPI.class);
-        addCategoryAPI = restAdapter.create(AddCategoryAPI.class);
+        categoryWorkAPI = restAdapter.create(CategoryWorkAPI.class);
+        googleWorkAPI = restAdapter.create(GoogleWorkAPI.class);
     }
 
     public RegisterUserAPI getRegisterUserAPI() {
@@ -34,8 +38,11 @@ public class RestClient {
         return loginUserAPI;
     }
 
-    public AddCategoryAPI getCategoryAPI() {
-        return addCategoryAPI;
+    public CategoryWorkAPI getCategoryAPI() {
+        return categoryWorkAPI;
     }
 
+    public GoogleWorkAPI getGoogleWorkAPI() {
+        return googleWorkAPI;
+    }
 }
