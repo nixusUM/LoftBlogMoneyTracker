@@ -76,18 +76,18 @@ public class SplashActivity extends AppCompatActivity implements GoogleScopes {
     }
 
 // Явно пытался уже указать ему проверить
-    
+
     @Background
     void checkTokenValid() {
         restClient.getGoogleWorkAPI().tokenStatus(googleToken, new Callback<GoogleWorkModel>() {
             @Override
             public void success(GoogleWorkModel googleWorkModel, Response response) {
-                    if (googleWorkModel.getTokenStatus().equalsIgnoreCase("Error")) {
-                        doubleTokenCheck();
-                    } else {
+                    if (googleWorkModel.getTokenStatus().equalsIgnoreCase("success")) {
                         Intent intent = new Intent(SplashActivity.this, MainActivity_.class);
                         startActivity(intent);
                         finish();
+                    } else {
+                        doubleTokenCheck();
                     }
                 }
 
@@ -123,7 +123,7 @@ public class SplashActivity extends AppCompatActivity implements GoogleScopes {
             } catch (final UserRecoverableAuthException e) {
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        startActivityForResult(e.getIntent(), 111);
+                        startActivityForResult(e.getIntent(), 2222);
                     }
                 });
             } catch (GoogleAuthException e) {

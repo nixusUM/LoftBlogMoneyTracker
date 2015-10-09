@@ -43,7 +43,7 @@ public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 //        categoriesSync();
-        Log.d(LOG_TAG, "Ziga!!!" + " " + "onPerformSync() returned: ");
+        Log.d(LOG_TAG, "start!!!" + " " + "onPerformSync() returned: ");
     }
 
     public static void syncImmediately(Context context) {
@@ -90,7 +90,9 @@ public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
         String authority = context.getString(R.string.content_authority);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
 // we can enable inexact timers in our periodic sync
+
             SyncRequest request = new SyncRequest.Builder().
                     syncPeriodic(syncInterval, flexTime).
                     setSyncAdapter(account, authority).
@@ -109,7 +111,8 @@ public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
 //        for (Categories category : categories) {
 //            sendCategories = (CategoryWorkModel) restService.syncCategory(category.getId(), category.getTitle());
 //        }
-//        Log.d(LOG_TAG, "test post " + sendCategories.getCategoryAdd().getTitle());
+//        if (sendCategories != null) {
+//        }
 //
 //    }
 }
