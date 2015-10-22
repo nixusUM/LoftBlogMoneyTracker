@@ -13,5 +13,7 @@
         android:title="@string/nav.drawer.statistics"/>
     <item android:id="@+id/drawer_settings"
         android:title="@string/nav.drawer.settings" />
+    <item android:id="@+id/drawer_logout"
+        android:title="@string/nav.drawer.logout" />
     </group>
 </menu>

@@ -14,18 +14,19 @@ import android.util.Log;
 
 import com.activeandroid.query.Select;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import ru.loftblog.loftblogmoneytracker.MoneyTrackerApp;
 import ru.loftblog.loftblogmoneytracker.R;
 import ru.loftblog.loftblogmoneytracker.database.models.Categories;
+import ru.loftblog.loftblogmoneytracker.database.models.Expenses;
 import ru.loftblog.loftblogmoneytracker.rest.RestService;
+import ru.loftblog.loftblogmoneytracker.rest.models.CategoryOptions;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategoryWorkModel;
 
-/**
- * Created by nixoid on 10/8/15.
- */
 public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private static final int SYNC_INTERVAL = 60 * 60 * 24;
@@ -42,7 +43,8 @@ public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-//        categoriesSync();
+        categoriesSync();
+        expensesSync();
         Log.d(LOG_TAG, "start!!!" + " " + "onPerformSync() returned: ");
     }
 
@@ -104,15 +106,52 @@ public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
-//    public void categoriesSync() {
-//        RestService restService = new RestService();
-//        CategoryWorkModel sendCategories = null;
-//        List<Categories> categories = new Select().from(Categories.class).execute();
-//        for (Categories category : categories) {
-//            sendCategories = (CategoryWorkModel) restService.syncCategory(category.getId(), category.getTitle());
-//        }
-//        if (sendCategories != null) {
-//        }
-//
-//    }
+    private void categoriesSync() {
+        RestService restService = new RestService();
+        List<Categories> categories = new Select().from(Categories.class).execute();
+        if (!categories.isEmpty()) {
+            for (Categories category : categories) {
+                restService.categoriesSync(category.getId().intValue(),
+                        category.title,
+                        MoneyTrackerApp.getGoogleToken(getContext()),
+                        MoneyTrackerApp.getToken(getContext()),
+                        new Callback<CategoryOptions>() {
+                            @Override
+                            public void success(CategoryOptions categoryDetails, Response response) {
+                                Log.e(LOG_TAG, "OK. Category sync success");
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Log.e(LOG_TAG, "ERROR. Category sync failed");
+                            }
+                        });
+            }
+        }
+    }
+
+    private void expensesSync() {
+        RestService restService = new RestService();
+        List<Expenses> expenses = new Select().from(Expenses.class).execute();
+        if (!expenses.isEmpty()){
+            for(Expenses expense : expenses)
+                restService.expensesSync(expense.getId().intValue(),
+                        expense.name,
+                        expense.price,
+                        expense.date,
+                        MoneyTrackerApp.getGoogleToken(getContext()),
+                        MoneyTrackerApp.getToken(getContext()),
+                        new Callback<CategoryOptions>() {
+                            @Override
+                            public void success(CategoryOptions categoryOptions, Response response) {
+                                Log.e(LOG_TAG, "OK. Expenses sync success");
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Log.e(LOG_TAG, "ERROR. Expenses sync failed");
+                            }
+                        });
+        }
+    }
 }

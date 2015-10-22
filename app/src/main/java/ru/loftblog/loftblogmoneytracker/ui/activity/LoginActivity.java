@@ -42,7 +42,7 @@ import static ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus.WRON
 
 
 @EActivity(R.layout.user_login_layout)
-public class LoginActivity extends AppCompatActivity implements GoogleScopes{
+public class LoginActivity extends AppCompatActivity implements GoogleScopes {
 
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
 
@@ -145,7 +145,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleScopes{
         } catch (final UserRecoverableAuthException e) {
             runOnUiThread(new Runnable() {
                 public void run() {
-                    startActivityForResult(e.getIntent(), 21);
+                    startActivityForResult(e.getIntent(), 11);
                 }
             });
         } catch (GoogleAuthException e) {
@@ -163,10 +163,4 @@ public class LoginActivity extends AppCompatActivity implements GoogleScopes{
         }
     }
 }
-
-
-
-
-
-
 

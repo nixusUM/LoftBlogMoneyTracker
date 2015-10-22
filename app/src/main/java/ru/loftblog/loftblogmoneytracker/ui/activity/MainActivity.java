@@ -1,5 +1,6 @@
 package ru.loftblog.loftblogmoneytracker.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -29,10 +30,13 @@ import ru.loftblog.loftblogmoneytracker.database.models.Categories;
 import ru.loftblog.loftblogmoneytracker.rest.RestService;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategoryWorkModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.GoogleWorkModel;
+import ru.loftblog.loftblogmoneytracker.rest.models.LogoutModel;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.CategoriesFragment_;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.ExpensesFragment_;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.SettingsFragment_;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.StatisticsFragment_;
+import ru.loftblog.loftblogmoneytracker.utils.TokenStorage;
+import ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {
@@ -96,9 +100,6 @@ public class MainActivity extends AppCompatActivity {
             new Categories("Clothes").save();
             new Categories("Travels").save();
             new Categories("Life").save();
-            new Categories("Food").save();
-            new Categories("Study").save();
-            new Categories("Fun").save();
         }
     }
 
@@ -107,9 +108,11 @@ public class MainActivity extends AppCompatActivity {
         RestService restService = new RestService();
         CategoryWorkModel categoryAdd = null;
         List<Categories> categoriesList = new Select().from(Categories.class).execute();
-        for (Categories category : categoriesList) {
-            categoryAdd = restService.addCategory(category.title, MoneyTrackerApp.getGoogleToken(this)
-                    ,MoneyTrackerApp.getToken(this));
+        if (categoriesList.isEmpty()) {
+            for (Categories category : categoriesList) {
+                categoryAdd = restService.addCategory(category.title, MoneyTrackerApp.getGoogleToken(this)
+                        , MoneyTrackerApp.getToken(this));
+            }
         }
     }
 
@@ -128,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         name.setText(workModel.getName());
         email.setText(workModel.getEmail());
         Picasso.with(this).load(workModel.getPicture()).into(photo);
+        Log.d(LOG_TAG, "main " + workModel.getName());
     }
 
     @AfterViews
@@ -160,6 +164,22 @@ public class MainActivity extends AppCompatActivity {
             case R.id.drawer_settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new SettingsFragment_()).addToBackStack(null).commit();
                 break;
+            case R.id.drawer_logout:
+                logoOut();
+                break;
         }
+    }
+
+    @Background
+    void logoOut() {
+        RestService restService = new RestService();
+        String logout = restService.logout().getStatus();
+        if (LoginUserStatus.STATUS_OK.equals(logout)) {
+            Intent intent = new Intent(this, LoginActivity_.class);
+            startActivity(intent);
+            finish();
+            MoneyTrackerApp.setToken(this, TokenStorage.DEFAULT_TOKEN_KEY);
+        }
+        Log.d(LOG_TAG, "from server logout: " + logout);
     }
 }

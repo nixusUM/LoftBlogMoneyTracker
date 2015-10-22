@@ -60,36 +60,34 @@ public class SplashActivity extends AppCompatActivity implements GoogleScopes {
         googleToken = MoneyTrackerApp.getGoogleToken(this);
         token = MoneyTrackerApp.getToken(this);
         if (token.equals("1") && googleToken.equals("2")) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent regIntent = new Intent(SplashActivity.this, UserRegistration_.class);
-                startActivity(regIntent);
-                finish();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent regIntent = new Intent(SplashActivity.this, UserRegistration_.class);
+                    startActivity(regIntent);
+                    finish();
                 }
-                }, SPLASH_TIME_OUT);
-          } else {
+            }, SPLASH_TIME_OUT);
+        } else {
             if (chkConnect.isOnline(this)) {
                 checkTokenValid();
             } else  Toast.makeText(this, checkInternet, Toast.LENGTH_SHORT).show();
         }
     }
 
-// Явно пытался уже указать ему проверить
-
     @Background
     void checkTokenValid() {
         restClient.getGoogleWorkAPI().tokenStatus(googleToken, new Callback<GoogleWorkModel>() {
             @Override
             public void success(GoogleWorkModel googleWorkModel, Response response) {
-                    if (googleWorkModel.getTokenStatus().equalsIgnoreCase("success")) {
-                        Intent intent = new Intent(SplashActivity.this, MainActivity_.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        doubleTokenCheck();
-                    }
+                if (googleWorkModel.getStatus().equalsIgnoreCase("success")) {
+                    Intent intent = new Intent(SplashActivity.this, MainActivity_.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    doubleTokenCheck();
                 }
+            }
 
             @Override
             public void failure(RetrofitError error) {
@@ -106,35 +104,35 @@ public class SplashActivity extends AppCompatActivity implements GoogleScopes {
         }else  Toast.makeText(this, checkInternet, Toast.LENGTH_SHORT).show();
     }
 
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if (requestCode == 111 && resultCode == RESULT_OK) {
-                getGoogleToken(data);
-            }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 111 && resultCode == RESULT_OK) {
+            getGoogleToken(data);
+        }
+    }
+
+    @Background
+    void getGoogleToken(Intent data) {
+        final String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+        String googleToken = null;
+        try {
+            googleToken = GoogleAuthUtil.getToken(SplashActivity.this, accountName, SCOPES);
+        } catch (IOException e) {
+        } catch (final UserRecoverableAuthException e) {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    startActivityForResult(e.getIntent(), 111);
+                }
+            });
+        } catch (GoogleAuthException e) {
+            e.printStackTrace();
         }
 
-        @Background
-        void getGoogleToken(Intent data) {
-            final String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-            String googleToken = null;
-            try {
-                googleToken = GoogleAuthUtil.getToken(SplashActivity.this, accountName, SCOPES);
-            } catch (IOException e) {
-            } catch (final UserRecoverableAuthException e) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        startActivityForResult(e.getIntent(), 2222);
-                    }
-                });
-            } catch (GoogleAuthException e) {
-                e.printStackTrace();
-            }
+        MoneyTrackerApp.setGoogleToken(SplashActivity.this, googleToken);
+        String googleSharedToken = MoneyTrackerApp.getGoogleToken(this);
 
-            MoneyTrackerApp.setGoogleToken(SplashActivity.this, googleToken);
-            String googleSharedToken = MoneyTrackerApp.getGoogleToken(this);
-
-            Intent intent = new Intent(SplashActivity.this, MainActivity_.class);
-            startActivity(intent);
-            finish();
+        Intent intent = new Intent(SplashActivity.this, MainActivity_.class);
+        startActivity(intent);
+        finish();
     }
 }

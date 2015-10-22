@@ -29,6 +29,7 @@
             android:inputType="numberDecimal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="italic"
             android:layout_gravity="fill"
             android:layout_marginTop="@dimen/act_add_txt"
             android:layout_row="0"
@@ -49,6 +50,7 @@
             android:id="@+id/etDescript"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="italic"
             android:layout_gravity="fill"
             android:layout_marginTop="@dimen/act_add_txt"
             android:layout_row="1"
@@ -100,16 +102,17 @@
             android:hint="@string/today"
             android:layout_row="3"
             android:layout_column="1" />
-        <Button
-            android:id="@+id/addBtnExpence"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_rounded_all"
-            android:padding="@dimen/text_items"
-            android:text="@string/add_btn_txt"
-            android:layout_marginTop="@dimen/regAct_btn_margin"
-            android:layout_gravity="center_horizontal"
-            android:layout_row="4"
-            android:layout_column="1" />
     </GridLayout>
+
+    <Button
+        android:id="@+id/addBtnExpence"
+        android:layout_width="332dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_rounded_all"
+        android:padding="@dimen/text_items"
+        android:text="@string/add_btn_txt"
+        android:layout_marginTop="@dimen/regAct_btn_margin"
+        android:layout_gravity="center_horizontal"
+        android:layout_row="4"
+        android:layout_column="1" />
 </LinearLayout>

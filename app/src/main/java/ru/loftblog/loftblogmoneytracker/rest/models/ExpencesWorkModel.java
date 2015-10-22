@@ -6,13 +6,23 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryWorkModel {
+public class ExpencesWorkModel {
 
     @Expose
     private String status;
+    @Expose
+    private Integer id;
     @SerializedName("data")
     @Expose
-    private List<CategoryOptions> categories = new ArrayList<>();
+    private List<ExpenceOptions> expenses = new ArrayList<>();
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     /**
      *
@@ -37,17 +47,17 @@ public class CategoryWorkModel {
      * @return
      * The data
      */
-    public List<CategoryOptions> getCategories() {
-        return categories;
+    public List<ExpenceOptions> getExpenses() {
+        return expenses;
     }
 
     /**
      *
-     * @param categoriesItems
+     * @param expenses
      * The data
      */
-    public void setCategories(List<CategoryOptions> categoriesItems) {
-        this.categories = categoriesItems;
+    public void setExpenses(List<ExpenceOptions> expenses) {
+        this.expenses = expenses;
     }
-
 }
+

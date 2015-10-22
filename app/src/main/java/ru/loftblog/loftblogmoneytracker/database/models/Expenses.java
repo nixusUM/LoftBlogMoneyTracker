@@ -52,7 +52,7 @@ public class Expenses extends Model {
         this.categories = categories;
     }
 
-    @Column(name = "Categories")
+    @Column(name = "Categories", onDelete = Column.ForeignKeyAction.CASCADE)
     public Categories categories;
 
 }

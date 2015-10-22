@@ -39,7 +39,7 @@ public class GoogleWorkModel {
     @Expose
     private String locale;
 
-    public String getTokenStatus() {
+    public String getStatus() {
         return status;
     }
 
