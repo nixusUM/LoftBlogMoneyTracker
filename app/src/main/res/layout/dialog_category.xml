@@ -18,12 +18,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/greenBtn"
+        android:textStyle="bold"
         android:textSize="@dimen/categor_text"/>
 
     <EditText
         android:id="@+id/editDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textStyle="italic"
         android:textSize="@dimen/categor_text"
         android:hint="@string/categories"/>
 
@@ -35,6 +37,7 @@
         android:id="@+id/cancelButton"
         android:layout_width="@dimen/dialBtn"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
         android:background="@color/backGroundDark"
         android:textColor="@color/greenBtn"
         android:text="@string/cancelBtn"/>
@@ -43,6 +46,7 @@
         android:id="@+id/okButton"
         android:layout_width="@dimen/dialBtn"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
