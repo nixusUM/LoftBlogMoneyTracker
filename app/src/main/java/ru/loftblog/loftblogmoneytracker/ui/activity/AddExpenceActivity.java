@@ -1,5 +1,6 @@
 package ru.loftblog.loftblogmoneytracker.ui.activity;
 
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -65,7 +66,8 @@ public class AddExpenceActivity extends AppCompatActivity {
     void ready() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Добавить трату");
+        setTitle(getString(R.string.addExpenses));
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     private List<Categories> getCategories() {
@@ -99,7 +101,7 @@ public class AddExpenceActivity extends AppCompatActivity {
             return;
         }
         new Expenses(etPrice.getText().toString(), etDescript.getText().toString(), etToday.getText().toString(), (Categories)etCategories.getSelectedItem()).save();
-        Toast.makeText(this, "Запись с примечанием " + etDescript.getText().toString() + " добавлена!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.toastExpens) + etDescript.getText().toString() + getString(R.string.toastExpensesAdd), Toast.LENGTH_SHORT).show();
         finish();
         overridePendingTransition(R.anim.from_midle, R.anim.to_midle);
     }
@@ -116,7 +118,7 @@ public class AddExpenceActivity extends AppCompatActivity {
                 etToday.setText((String.format("%s.%s.%s", String.valueOf(dayOfMonth), String.valueOf(monthOfYear + 1), String.valueOf(year))));
             }
         };
-        datePicker.show(getSupportFragmentManager(), "datePicker");
+        datePicker.show(getSupportFragmentManager(), getString(R.string.pickerDialogName));
     }
 }
 

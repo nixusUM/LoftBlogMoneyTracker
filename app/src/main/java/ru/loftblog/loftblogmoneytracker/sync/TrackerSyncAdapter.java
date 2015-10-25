@@ -130,7 +130,6 @@ public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
-
     private void expensesSync() {
         RestService restService = new RestService();
         List<Expenses> expenses = new Select().from(Expenses.class).execute();

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/ContainerLand">
+    <include layout="@layout/toolbar"
+        android:id="@+id/include" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/headRegAct"
+        android:id="@+id/txtLogin"
+        android:layout_marginTop="31dp"
+        android:layout_below="@+id/include"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/edLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="@string/inputLogin"
+        android:ems="10"
+        android:layout_marginTop="26dp"
+        android:layout_below="@+id/txtLogin"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/edLoginPassw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="@string/inputPass"
+        android:ems="10"
+        android:layout_below="@+id/edLogin"
+        android:layout_alignLeft="@+id/edLogin"
+        android:layout_alignStart="@+id/edLogin" />
+
+    <Button
+        android:id="@+id/loginBtn"
+        android:layout_width="@dimen/loginBtn_width"
+        android:layout_height="@dimen/loginBtn_height"
+        android:textColor="@color/white"
+        android:background="@drawable/button_rounded_all"
+        android:text="@string/loginButton"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/edLoginPassw"
+        android:layout_alignLeft="@+id/edLoginPassw"
+        android:layout_alignStart="@+id/edLoginPassw" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="@dimen/loginBtn_width"
+        android:layout_height="@dimen/loginBtn_height"
+        android:layout_below="@+id/loginBtn"
+        android:layout_alignRight="@+id/loginBtn"
+        android:layout_alignEnd="@+id/loginBtn" />
+
+
+</RelativeLayout>

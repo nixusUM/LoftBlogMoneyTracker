@@ -37,10 +37,12 @@
         </activity>
         <activity
             android:name=".ui.activity.UserRegistration_"
+            android:configChanges="keyboardHidden|orientation"
             android:label="@string/usrRegAct" >
         </activity>
         <activity
             android:name=".ui.activity.LoginActivity_"
+            android:configChanges="keyboardHidden|orientation"
             android:label="@string/loginAct" >
         </activity>
         <activity

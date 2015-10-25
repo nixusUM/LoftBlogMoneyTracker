@@ -1,9 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/Container">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/txtStat"
-        android:id="@+id/txt_statistics" />
+
+    <ru.loftblog.loftblogmoneytracker.PieChartView
+        android:id="@+id/pieChart"
+        android:layout_marginTop="@dimen/marginPieChart"
+        android:layout_width="@dimen/pieChartWidth"
+        android:layout_height="@dimen/pieChartHeight"/>
+
 </RelativeLayout>
