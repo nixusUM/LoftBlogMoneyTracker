@@ -43,9 +43,9 @@ public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+        Log.d(LOG_TAG, "StartSync all data");
         categoriesSync();
         expensesSync();
-        Log.d(LOG_TAG, "start!!!" + " " + "onPerformSync() returned: ");
     }
 
     public static void syncImmediately(Context context) {
@@ -117,24 +117,25 @@ public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
                         MoneyTrackerApp.getToken(getContext()),
                         new Callback<CategoryOptions>() {
                             @Override
-                            public void success(CategoryOptions categoryDetails, Response response) {
-                                Log.e(LOG_TAG, "OK. Category sync success");
+                            public void success(CategoryOptions categoryOptions, Response response) {
+                                Log.e(LOG_TAG, "Good");
                             }
 
                             @Override
                             public void failure(RetrofitError error) {
-                                Log.e(LOG_TAG, "ERROR. Category sync failed");
+                                Log.e(LOG_TAG, "Error");
                             }
                         });
             }
         }
     }
 
+
     private void expensesSync() {
         RestService restService = new RestService();
         List<Expenses> expenses = new Select().from(Expenses.class).execute();
-        if (!expenses.isEmpty()){
-            for(Expenses expense : expenses)
+        if (!expenses.isEmpty()) {
+            for (Expenses expense : expenses)
                 restService.expensesSync(expense.getId().intValue(),
                         expense.name,
                         expense.price,
@@ -144,12 +145,12 @@ public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
                         new Callback<CategoryOptions>() {
                             @Override
                             public void success(CategoryOptions categoryOptions, Response response) {
-                                Log.e(LOG_TAG, "OK. Expenses sync success");
+                                Log.e(LOG_TAG, "Good");
                             }
 
                             @Override
                             public void failure(RetrofitError error) {
-                                Log.e(LOG_TAG, "ERROR. Expenses sync failed");
+                                Log.e(LOG_TAG, "Error");
                             }
                         });
         }

@@ -24,7 +24,7 @@ public interface CategoryWorkAPI {
                                    @Query("auth_token") String token);
 
         @GET("/categories/del")
-        CategoryWorkModel deleteCategory(@Query("id") Integer id,
+        CategoryWorkModel deleteCategory(@Query("id") Long id,
                                      @Query("google_token") String gToken,
                                      @Query("auth_token") String token);
 

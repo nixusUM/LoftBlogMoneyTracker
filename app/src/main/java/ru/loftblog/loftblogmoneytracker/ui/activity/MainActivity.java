@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.activeandroid.query.Select;
 import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.AfterViews;
@@ -22,20 +21,18 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.List;
-
 import ru.loftblog.loftblogmoneytracker.MoneyTrackerApp;
 import ru.loftblog.loftblogmoneytracker.R;
-import ru.loftblog.loftblogmoneytracker.database.models.Categories;
 import ru.loftblog.loftblogmoneytracker.rest.RestService;
+import ru.loftblog.loftblogmoneytracker.rest.models.CategoryOptions;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategoryWorkModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.GoogleWorkModel;
-import ru.loftblog.loftblogmoneytracker.rest.models.LogoutModel;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.CategoriesFragment_;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.ExpensesFragment_;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.SettingsFragment_;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.StatisticsFragment_;
 import ru.loftblog.loftblogmoneytracker.utils.TokenStorage;
+import ru.loftblog.loftblogmoneytracker.utils.checks.CheckNetworkConnection;
 import ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus;
 
 @EActivity(R.layout.activity_main)
@@ -67,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sendToSiteCategories();
+        getAllCategories();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ExpensesFragment_()).commit();
         }
@@ -94,24 +91,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @AfterViews
-    void insertCategories() {
-        if (new Select().from(Categories.class).execute().size() == 0) {
-            new Categories("Clothes").save();
-            new Categories("Travels").save();
-            new Categories("Life").save();
-        }
-    }
-
     @Background
-    public void sendToSiteCategories() {
+    void getAllCategories() {
         RestService restService = new RestService();
-        CategoryWorkModel categoryAdd = null;
-        List<Categories> categoriesList = new Select().from(Categories.class).execute();
-        if (categoriesList.isEmpty()) {
-            for (Categories category : categoriesList) {
-                categoryAdd = restService.addCategory(category.title, MoneyTrackerApp.getGoogleToken(this)
-                        , MoneyTrackerApp.getToken(this));
+        if (CheckNetworkConnection.isOnline(this)) {
+            CategoryWorkModel getCategories = restService.getAllCategories(MoneyTrackerApp.getGoogleToken(this),
+                    MoneyTrackerApp.getToken(this));
+            if (LoginUserStatus.STATUS_OK.equals(getCategories.getStatus())) {
+                for (CategoryOptions category : getCategories.getCategories()) {
+                    Log.e(LOG_TAG, "Category name: " + category.getTitle() +
+                            ", Category id: " + category.getId());
+                }
             }
         }
     }
@@ -174,12 +164,11 @@ public class MainActivity extends AppCompatActivity {
     void logoOut() {
         RestService restService = new RestService();
         String logout = restService.logout().getStatus();
-        if (LoginUserStatus.STATUS_OK.equals(logout)) {
-            Intent intent = new Intent(this, LoginActivity_.class);
+        if (logout.equals("")) {
+            Intent intent = new Intent(this, UserRegistration_.class);
             startActivity(intent);
             finish();
             MoneyTrackerApp.setToken(this, TokenStorage.DEFAULT_TOKEN_KEY);
         }
-        Log.d(LOG_TAG, "from server logout: " + logout);
     }
 }

@@ -15,30 +15,42 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.query.Select;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.OptionsMenuItem;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
+import ru.loftblog.loftblogmoneytracker.MoneyTrackerApp;
 import ru.loftblog.loftblogmoneytracker.adapters.CategoriesAdapter;
 import ru.loftblog.loftblogmoneytracker.R;
 import ru.loftblog.loftblogmoneytracker.database.models.Categories;
+import ru.loftblog.loftblogmoneytracker.rest.RestService;
+import ru.loftblog.loftblogmoneytracker.rest.models.CategoryOptions;
+import ru.loftblog.loftblogmoneytracker.rest.models.CategoryWorkModel;
+import ru.loftblog.loftblogmoneytracker.utils.checks.CheckNetworkConnection;
+import ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus;
 
 @EFragment(R.layout.categories_fragment)
 public class CategoriesFragment extends Fragment{
 
+    private static final String LOG_TAG = "CategoriesFragment";
     private ActionMode.Callback actionModeCallBack = new ActionModeCallBack();
     private ActionMode actionMode;
     private CategoriesAdapter adapter;
@@ -59,6 +71,7 @@ public class CategoriesFragment extends Fragment{
 
     @AfterViews
     void setupList() {
+        loadDate();
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -66,7 +79,7 @@ public class CategoriesFragment extends Fragment{
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getDataList();
+                getAllCategories();
             }
         });
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -76,6 +89,28 @@ public class CategoriesFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+        loadDate();
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                adapter.removeItem(viewHolder.getAdapterPosition());
+                deleteCategories();
+                final Snackbar snackbar = Snackbar
+                        .make(recyclerView, "Запись удалена" , Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    private void loadDate() {
         getLoaderManager().restartLoader(0, null, new LoaderManager.LoaderCallbacks<List<Categories>>() {
 
             @Override
@@ -96,52 +131,72 @@ public class CategoriesFragment extends Fragment{
             public void onLoadFinished(Loader<List<Categories>> loader, List<Categories> data) {
                 swipeRefreshLayout.setRefreshing(false);
                 adapter = (new CategoriesAdapter(getDataList(), new CategoriesAdapter.CardViewHolder.ClickListener() {
-                @Override
-                public void onItemClicked ( int position){
-                    if (actionMode != null) {
+                    @Override
+                    public void onItemClicked(int position) {
+                        if (actionMode != null) {
+                            toggleSelection(position);
+                        }
+                    }
+
+                    @Override
+                    public boolean onItemLongClicked(int position) {
+                        if (actionMode == null) {
+                            AppCompatActivity activity = (AppCompatActivity) getActivity();
+                            actionMode = activity.startSupportActionMode(actionModeCallBack);
+                        }
                         toggleSelection(position);
+                        return true;
                     }
-
                 }
-
-                @Override
-                public boolean onItemLongClicked ( int position){
-                    if (actionMode == null) {
-                        AppCompatActivity activity = (AppCompatActivity) getActivity();
-                        actionMode = activity.startSupportActionMode(actionModeCallBack);
-                    }
-                    toggleSelection(position);
-                    return true;
-                }
+                ));
+                recyclerView.setAdapter(adapter);
             }
 
-            ));
-
-            recyclerView.setAdapter(adapter);
-        }
-
-        @Override
+            @Override
             public void onLoaderReset(Loader<List<Categories>> loader) {
             }
         });
+    }
 
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
+
+    @Background
+    void getAllCategories() {
+        RestService restService = new RestService();
+        if (CheckNetworkConnection.isOnline(getContext())) {
+            CategoryWorkModel getCategories = restService.getAllCategories(MoneyTrackerApp.getGoogleToken(getContext()),
+                    MoneyTrackerApp.getToken(getContext()));
+            if (LoginUserStatus.STATUS_OK.equals(getCategories.getStatus())) {
+                for (CategoryOptions category : getCategories.getCategories()) {
+                    Log.e(LOG_TAG, "Category name: " + category.getTitle() +
+                            ", Category id: " + category.getId());
+                }
             }
+        }
+    }
 
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                adapter.removeItem(viewHolder.getAdapterPosition());
-                final Snackbar snackbar = Snackbar
-                        .make(recyclerView, "Запись удалена" , Snackbar.LENGTH_LONG);
-                snackbar.show();
+    @Background
+    void deleteCategories() {
+        Categories category = new Categories();
+        RestService restService = new RestService();
+        if (CheckNetworkConnection.isOnline(getContext())) {
+            CategoryWorkModel delCategories = restService.deleteCategory(category.getId(),
+                    MoneyTrackerApp.getGoogleToken(getContext()),
+                    MoneyTrackerApp.getToken(getContext()));
+//            Log.d(LOG_TAG, "Categry" + category.getId());
+        }
+    }
+
+    @Background
+    public void sendToSiteCategories() {
+        RestService restService = new RestService();
+        CategoryWorkModel categoryAdd = null;
+        List<Categories> categoriesList = new Select().from(Categories.class).execute();
+        if (categoriesList.isEmpty()) {
+            for (Categories category : categoriesList) {
+                categoryAdd = restService.addCategory(category.title, MoneyTrackerApp.getGoogleToken(getContext())
+                        , MoneyTrackerApp.getToken(getContext()));
             }
-        };
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        }
     }
 
     private void toggleSelection(int position) {
@@ -175,6 +230,7 @@ public class CategoriesFragment extends Fragment{
                 Categories category = new Categories();
                 Toast.makeText(getActivity(), "Категория: " + text.toString() + " добавлена", Toast.LENGTH_SHORT).show();
                 category.setTitle(text.toString());
+                sendToSiteCategories();
                 adapter.insertItem(category);
                 dialog.dismiss();
             }
@@ -188,7 +244,6 @@ public class CategoriesFragment extends Fragment{
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.show();
     }
-
 
     private class ActionModeCallBack implements android.support.v7.view.ActionMode.Callback {
 
@@ -209,17 +264,13 @@ public class CategoriesFragment extends Fragment{
             switch (item.getItemId()) {
                 case R.id.menu_removed:
                     adapter.removeItems(adapter.getSelectedItems());
-                    mode.finish();
-                    return true;
-                case R.id.menu_search:
-                    Toast.makeText(getActivity(), "Search clicked", Toast.LENGTH_SHORT).show();
+                    deleteCategories();
                     mode.finish();
                     return true;
                 default:
                     return false;
             }
         }
-
         @Override
         public void onDestroyActionMode(android.support.v7.view.ActionMode mode) {
             adapter.clearSelection();
