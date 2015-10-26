@@ -34,4 +34,5 @@
     <dimen name="pieChartWidth">300dp</dimen>
     <dimen name="pieChartHeight">300dp</dimen>
     <dimen name="marginPieChart">25dp</dimen>
+    <dimen name="graphLayout">400dp</dimen>
 </resources>

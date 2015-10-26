@@ -1,10 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Container">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/Container.Background">
 
-    <ru.loftblog.loftblogmoneytracker.PieChartView
-        android:id="@+id/pieChart"
-        android:layout_marginTop="@dimen/marginPieChart"
-        android:layout_width="@dimen/pieChartWidth"
-        android:layout_height="@dimen/pieChartHeight"/>
+    <FrameLayout
+        android:id="@+id/mainLayot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 
 </RelativeLayout>

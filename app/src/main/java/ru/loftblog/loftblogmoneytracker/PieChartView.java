@@ -32,16 +32,23 @@ public class PieChartView extends View{
             int endBottom = getWidth();
             int endRight = endBottom;
             Random r = new Random();
+            Paint innerPaintObj = new Paint();
+            innerPaintObj.setColor(getResources().getColor(R.color.backGroundDark));
+            innerPaintObj.setStyle(Paint.Style.FILL);
+            innerPaintObj.setAntiAlias(true);
             rectF = new RectF(startLeft, startTop, endRight, endBottom);
             float[] scaledValues = scale();
             float sliceStartPoint = 0;
             for (float scaledValue : scaledValues) {
                 int color = Color.argb(1200, r.nextInt(256), r.nextInt(256), r.nextInt(256));
                 slicePaint.setColor(color);
+                slicePaint.setTextAlign(Paint.Align.CENTER);
+                canvas.drawText("here is some text", startLeft, 400, innerPaintObj);
                 canvas.drawArc(rectF, sliceStartPoint, scaledValue, true, slicePaint);
                 sliceStartPoint += scaledValue;
-            }
+                canvas.drawCircle(getWidth()/2, getHeight()/2, 190, innerPaintObj);
 
+            }
         }
     }
 

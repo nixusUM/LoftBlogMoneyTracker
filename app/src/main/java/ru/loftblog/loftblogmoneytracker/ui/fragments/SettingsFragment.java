@@ -12,6 +12,6 @@ public class SettingsFragment extends Fragment{
 
     @AfterViews
     void ready () {
-        getActivity().setTitle(getString(R.string.statistics));
+        getActivity().setTitle(getString(R.string.txtSettings));
     }
 }
