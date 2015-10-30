@@ -12,6 +12,9 @@ public class Categories extends Model {
     @Column(name = "title")
     public String title;
 
+    @Column(name = "servId")
+    public int servId;
+
     public String getTitle() {
         return title;
     }
@@ -20,13 +23,22 @@ public class Categories extends Model {
         this.title = title;
     }
 
+    public int getServId() {
+        return servId;
+    }
+
+    public void setServId(int servId) {
+        this.servId = servId;
+    }
+
     public Categories() {
         super();
     }
 
-    public Categories(String title) {
+    public Categories(String title, int servId) {
         super();
         this.title = title;
+        this.servId = servId;
     }
 
     @Override

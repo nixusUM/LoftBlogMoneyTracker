@@ -2,7 +2,7 @@ package ru.loftblog.loftblogmoneytracker.rest.models;
 
 import com.google.gson.annotations.Expose;
 
-public class CategoryOptions {
+public class CategoryData {
 
     @Expose
     private String title;

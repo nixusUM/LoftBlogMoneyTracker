@@ -120,17 +120,18 @@ public class AddExpenceActivity extends AppCompatActivity {
         };
         datePicker.show(getSupportFragmentManager(), getString(R.string.pickerDialogName));
     }
-}
-
-
+//
+//
 //    @Background
 //    void addExpense() {
 //        Categories categories = new Categories();
 //        RestService restService = new RestService();
 //        if ((etCategories.getSelectedItem() == categories.getTitle())) {
-//            ExpencesWorkModel addExpenseResp = restService.addExpense(etPrice.getText().toString(), etDescript.getText().toString(), categories.getId(), getToday(),
+//            ExpencesWorkModel addExpenseResp = restService.addExpense(etPrice.getText().toString(), etDescript.getText().toString(), categories.getId(), ,
 //                    MoneyTrackerApp.getGoogleToken(this), MoneyTrackerApp.getToken(this));
 //            if (LoginUserStatus.STATUS_OK.equals(addExpenseResp.getStatus()))
 //                Log.e(LOG_TAG, "Add Expence to server: " + addExpenseResp.getId());
 //        }
 //    }
+}
+

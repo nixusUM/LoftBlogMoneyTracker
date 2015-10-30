@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.activeandroid.query.Select;
 import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.AfterViews;
@@ -21,10 +22,14 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.List;
+
 import ru.loftblog.loftblogmoneytracker.MoneyTrackerApp;
 import ru.loftblog.loftblogmoneytracker.R;
+import ru.loftblog.loftblogmoneytracker.database.models.Categories;
 import ru.loftblog.loftblogmoneytracker.rest.RestService;
-import ru.loftblog.loftblogmoneytracker.rest.models.CategoryOptions;
+import ru.loftblog.loftblogmoneytracker.rest.models.AllCategoriesModel;
+import ru.loftblog.loftblogmoneytracker.rest.models.CategoryData;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategoryWorkModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.GoogleWorkModel;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.CategoriesFragment_;
@@ -65,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getAllCategories();
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ExpensesFragment_()).commit();
         }
@@ -93,14 +99,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Background
     void getAllCategories() {
+        List<Categories> categories = new Select().from(Categories.class).execute();
         RestService restService = new RestService();
         if (CheckNetworkConnection.isOnline(this)) {
-            CategoryWorkModel getCategories = restService.getAllCategories(MoneyTrackerApp.getGoogleToken(this),
+            AllCategoriesModel getCategories = restService.getAllCategories(MoneyTrackerApp.getGoogleToken(this),
                     MoneyTrackerApp.getToken(this));
-            if (LoginUserStatus.STATUS_OK.equals(getCategories.getStatus())) {
-                for (CategoryOptions category : getCategories.getCategories()) {
-                    Log.e(LOG_TAG, "Category name: " + category.getTitle() +
-                            ", Category id: " + category.getId());
+            if (categories.isEmpty()) {
+                if (LoginUserStatus.STATUS_OK.equals(getCategories.getStatus())) {
+                    for (CategoryData category : getCategories.getCategories()) {
+                        Log.e(LOG_TAG, "Category: " + category.getTitle() +
+                                ", Category id: " + category.getId());
+                        new Categories(category.getTitle(), category.getId()).save();
+                    }
                 }
             }
         }
@@ -152,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new StatisticsFragment_()).addToBackStack(null).commit();
                 break;
             case R.id.drawer_settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new SettingsFragment_()).addToBackStack(null).commit();
+                getFragmentManager().beginTransaction().replace(R.id.frame_container, new SettingsFragment_()).addToBackStack(null).commit();
                 break;
             case R.id.drawer_logout:
                 logoOut();

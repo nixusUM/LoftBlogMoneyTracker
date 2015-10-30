@@ -6,30 +6,31 @@ import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Path;
 import retrofit.http.Query;
+import ru.loftblog.loftblogmoneytracker.rest.models.AllCategoriesModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategExpenceModel;
-import ru.loftblog.loftblogmoneytracker.rest.models.CategoryOptions;
+import ru.loftblog.loftblogmoneytracker.rest.models.CategoryData;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategoryWorkModel;
 
 public interface CategoryWorkAPI {
 
         @GET("/categories/add")
         CategoryWorkModel addCategory(@Query("title") String title,
-                                  @Query("google_token") String gToken,
-                                  @Query("auth_token") String token);
+                                      @Query("google_token") String gToken,
+                                      @Query("auth_token") String token);
 
         @GET("/categories/edit")
         CategoryWorkModel editCategory(@Query("title") String title,
-                                   @Query("id") Integer id,
-                                   @Query("google_token") String gToken,
-                                   @Query("auth_token") String token);
+                                       @Query("id") Integer id,
+                                       @Query("google_token") String gToken,
+                                       @Query("auth_token") String token);
 
         @GET("/categories/del")
-        CategoryWorkModel deleteCategory(@Query("id") Long id,
+        CategoryWorkModel deleteCategory(@Query("id") Integer id,
                                      @Query("google_token") String gToken,
                                      @Query("auth_token") String token);
 
         @GET("/categories")
-        CategoryWorkModel getAllCategories(@Query("google_token") String gToken,
+        AllCategoriesModel getAllCategories(@Query("google_token") String gToken,
                                             @Query("auth_token") String token);
 
         @GET("/categories/{id}")
@@ -42,7 +43,7 @@ public interface CategoryWorkAPI {
                             @Query("data[title]")String title,
                             @Query("google_token") String gToken,
                             @Query("auth_token") String token,
-                            Callback<CategoryOptions> cb);
+                            Callback<CategoryData> cb);
 
         @GET("/transcat")
         ArrayList<CategExpenceModel> getAllCategoriesWithExpenses(@Query("google_token") String gToken,

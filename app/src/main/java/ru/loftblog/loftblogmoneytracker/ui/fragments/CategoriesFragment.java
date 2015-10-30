@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,8 +30,6 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.OptionsMenu;
-import org.androidannotations.annotations.OptionsMenuItem;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
@@ -42,7 +39,8 @@ import ru.loftblog.loftblogmoneytracker.adapters.CategoriesAdapter;
 import ru.loftblog.loftblogmoneytracker.R;
 import ru.loftblog.loftblogmoneytracker.database.models.Categories;
 import ru.loftblog.loftblogmoneytracker.rest.RestService;
-import ru.loftblog.loftblogmoneytracker.rest.models.CategoryOptions;
+import ru.loftblog.loftblogmoneytracker.rest.models.AllCategoriesModel;
+import ru.loftblog.loftblogmoneytracker.rest.models.CategoryData;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategoryWorkModel;
 import ru.loftblog.loftblogmoneytracker.utils.checks.CheckNetworkConnection;
 import ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus;
@@ -71,7 +69,7 @@ public class CategoriesFragment extends Fragment{
 
     @AfterViews
     void setupList() {
-        loadDate();
+        loadData();
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -89,7 +87,7 @@ public class CategoriesFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-        loadDate();
+        loadData();
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -98,8 +96,8 @@ public class CategoriesFragment extends Fragment{
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                deleteCategories(adapter.getServId(viewHolder.getAdapterPosition()));
                 adapter.removeItem(viewHolder.getAdapterPosition());
-                deleteCategories();
                 final Snackbar snackbar = Snackbar
                         .make(recyclerView, R.string.deleteRecord , Snackbar.LENGTH_LONG);
                 snackbar.show();
@@ -110,7 +108,7 @@ public class CategoriesFragment extends Fragment{
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    private void loadDate() {
+    private void loadData() {
         getLoaderManager().restartLoader(0, null, new LoaderManager.LoaderCallbacks<List<Categories>>() {
 
             @Override
@@ -119,6 +117,7 @@ public class CategoriesFragment extends Fragment{
 
                     @Override
                     public List<Categories> loadInBackground() {
+                        swipeRefreshLayout.setRefreshing(false);
                         return getDataList();
                     }
                 };
@@ -129,12 +128,15 @@ public class CategoriesFragment extends Fragment{
 
             @Override
             public void onLoadFinished(Loader<List<Categories>> loader, List<Categories> data) {
-                swipeRefreshLayout.setRefreshing(false);
+
                 adapter = (new CategoriesAdapter(getDataList(), new CategoriesAdapter.CardViewHolder.ClickListener() {
                     @Override
                     public void onItemClicked(int position) {
                         if (actionMode != null) {
                             toggleSelection(position);
+                        }
+                        if (actionMode == null) {
+                            alerDialogEdit(position);
                         }
                     }
 
@@ -158,45 +160,76 @@ public class CategoriesFragment extends Fragment{
         });
     }
 
-
     @Background
     void getAllCategories() {
         RestService restService = new RestService();
         if (CheckNetworkConnection.isOnline(getContext())) {
-            CategoryWorkModel getCategories = restService.getAllCategories(MoneyTrackerApp.getGoogleToken(getContext()),
+            AllCategoriesModel getCategories = restService.getAllCategories(MoneyTrackerApp.getGoogleToken(getContext()),
                     MoneyTrackerApp.getToken(getContext()));
             if (LoginUserStatus.STATUS_OK.equals(getCategories.getStatus())) {
-                for (CategoryOptions category : getCategories.getCategories()) {
-                    Log.e(LOG_TAG, "Category name: " + category.getTitle() +
-                            ", Category id: " + category.getId());
+                for (CategoryData category : getCategories.getCategories()) {
+                    Log.e(LOG_TAG, "name: " + category.getTitle() +
+                            ", id: " + category.getId());
                 }
             }
         }
     }
 
     @Background
-    void deleteCategories() {
-        Categories category = new Categories();
+    void deleteCategories(int servId) {
         RestService restService = new RestService();
         if (CheckNetworkConnection.isOnline(getContext())) {
-            CategoryWorkModel delCategories = restService.deleteCategory(category.getId(),
-                    MoneyTrackerApp.getGoogleToken(getContext()),
+            CategoryWorkModel workModel = restService.deleteCategory(servId, MoneyTrackerApp.getGoogleToken(getContext()),
                     MoneyTrackerApp.getToken(getContext()));
-//            Log.d(LOG_TAG, "Categry" + category.getId());
+            if (LoginUserStatus.STATUS_OK.equals(workModel.getStatus())) {
+                Log.d(LOG_TAG, "Delete category "  + workModel.getCategories().getTitle());
+            }
         }
     }
 
     @Background
-    public void sendToSiteCategories() {
+    void deleteCategories(List<Integer>  stackCategories) {
         RestService restService = new RestService();
-        CategoryWorkModel categoryAdd = null;
-        List<Categories> categoriesList = new Select().from(Categories.class).execute();
-        if (categoriesList.isEmpty()) {
-            for (Categories category : categoriesList) {
-                categoryAdd = restService.addCategory(category.title, MoneyTrackerApp.getGoogleToken(getContext())
-                        , MoneyTrackerApp.getToken(getContext()));
+        if (CheckNetworkConnection.isOnline(getContext())) {
+            for (int i = 0; i < stackCategories.size(); i++) {
+                CategoryWorkModel workModel = restService.deleteCategory(stackCategories.get(i), MoneyTrackerApp.getGoogleToken(getContext()),
+                        MoneyTrackerApp.getToken(getContext()));
+                if (LoginUserStatus.STATUS_OK.equals(workModel.getStatus())) {
+                    Log.d(LOG_TAG, "Delete category "  + workModel.getCategories().getTitle());
+                }
             }
         }
+    }
+
+    @Background
+    public void sendToSiteCategories(String name) {
+        RestService restService = new RestService();
+        Categories category = new Select().from(Categories.class).where("title = ?", name).executeSingle();
+        if (CheckNetworkConnection.isOnline(getContext())) {
+            CategoryWorkModel workModel = restService.addCategory(name, MoneyTrackerApp.getGoogleToken(getContext())
+                    , MoneyTrackerApp.getToken(getContext()));
+            if (LoginUserStatus.STATUS_OK.equals(workModel.getStatus())) {
+                category.setServId(workModel.getCategories().getId());
+                category.save();
+            }
+            Log.d(LOG_TAG, "title" + category.getTitle() + "servId" + category.getServId());
+        }
+    }
+
+    @Background
+    public void editCategories(String name, int id) {
+        RestService restService = new RestService();
+        Categories category = new Select().from(Categories.class).where("title = ?", name).executeSingle();
+        if (CheckNetworkConnection.isOnline(getContext())) {
+            CategoryWorkModel workModel = restService.editCategory(name, id, MoneyTrackerApp.getGoogleToken(getContext())
+                    , MoneyTrackerApp.getToken(getContext()));
+            if (LoginUserStatus.STATUS_OK.equals(workModel.getStatus())) {
+                category.delete();
+                category.setTitle(workModel.getCategories().getTitle());
+                category.save();
+            }
+        }
+        Log.d(LOG_TAG, "Respons title" + ":" + category.getTitle());
     }
 
     private void toggleSelection(int position) {
@@ -215,6 +248,34 @@ public class CategoriesFragment extends Fragment{
         return new Select().from(Categories.class).execute();
     }
 
+    private void alerDialogEdit(final int id) {
+        final Dialog dialog = new Dialog(getActivity(), R.style.DialogStyle);
+        dialog.setContentView(R.layout.dialog_category);
+        EditText editText = (EditText) dialog.findViewById(R.id.editDialog);
+        TextView titleText = (TextView) dialog.findViewById(R.id.titleDialog);
+        final Editable text = editText.getText();
+        titleText.setText(getResources().getString(R.string.categoriesEdit));
+        Button okButton = (Button) dialog.findViewById(R.id.okButton);
+        Button cncButton = (Button) dialog.findViewById(R.id.cancelButton);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                adapter.removeItem(id);
+                adapter.test(text.toString());
+                editCategories(text.toString(), adapter.getServId(id));
+                dialog.dismiss();
+            }
+        });
+        cncButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
+    }
+
     private void alertDialog() {
         final Dialog dialog = new Dialog(getActivity(), R.style.DialogStyle);
         dialog.setContentView(R.layout.dialog_category);
@@ -227,11 +288,9 @@ public class CategoriesFragment extends Fragment{
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Categories category = new Categories();
                 Toast.makeText(getActivity(), "Категория: " + text.toString() + " добавлена", Toast.LENGTH_SHORT).show();
-                category.setTitle(text.toString());
-                sendToSiteCategories();
-                adapter.insertItem(category);
+                adapter.insertItem(text.toString());
+                sendToSiteCategories(text.toString());
                 dialog.dismiss();
             }
         });
@@ -263,8 +322,8 @@ public class CategoriesFragment extends Fragment{
         public boolean onActionItemClicked(android.support.v7.view.ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.menu_removed:
+                    deleteCategories(adapter.servId(adapter.getSelectedItems()));
                     adapter.removeItems(adapter.getSelectedItems());
-                    deleteCategories();
                     mode.finish();
                     return true;
                 default:

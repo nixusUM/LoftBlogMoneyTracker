@@ -14,7 +14,7 @@ public class CategExpenceModel {
     private String title;
     @SerializedName("transactions")
     @Expose
-    private List<ExpenceOptions> transactions = new ArrayList<>();
+    private ExpenceData transactions;
 
     /**
      *
@@ -57,7 +57,7 @@ public class CategExpenceModel {
      * @return
      * The transactions
      */
-    public List<ExpenceOptions> getTransactions() {
+    public ExpenceData getTransactions() {
         return transactions;
     }
 
@@ -66,7 +66,7 @@ public class CategExpenceModel {
      * @param transactions
      * The transactions
      */
-    public void setTransactions(List<ExpenceOptions> transactions) {
+    public void setTransactions(ExpenceData transactions) {
         this.transactions = transactions;
     }
 

@@ -24,8 +24,7 @@ import ru.loftblog.loftblogmoneytracker.R;
 import ru.loftblog.loftblogmoneytracker.database.models.Categories;
 import ru.loftblog.loftblogmoneytracker.database.models.Expenses;
 import ru.loftblog.loftblogmoneytracker.rest.RestService;
-import ru.loftblog.loftblogmoneytracker.rest.models.CategoryOptions;
-import ru.loftblog.loftblogmoneytracker.rest.models.CategoryWorkModel;
+import ru.loftblog.loftblogmoneytracker.rest.models.CategoryData;
 
 public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
 
@@ -43,9 +42,9 @@ public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        Log.d(LOG_TAG, "StartSync all data");
+        Log.e(LOG_TAG, "StartSync all data");
         categoriesSync();
-        expensesSync();
+//        expensesSync();
     }
 
     public static void syncImmediately(Context context) {
@@ -115,9 +114,9 @@ public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
                         category.title,
                         MoneyTrackerApp.getGoogleToken(getContext()),
                         MoneyTrackerApp.getToken(getContext()),
-                        new Callback<CategoryOptions>() {
+                        new Callback<CategoryData>() {
                             @Override
-                            public void success(CategoryOptions categoryOptions, Response response) {
+                            public void success(CategoryData categoryData, Response response) {
                                 Log.e(LOG_TAG, "Good");
                             }
 
@@ -141,9 +140,9 @@ public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
                         expense.date,
                         MoneyTrackerApp.getGoogleToken(getContext()),
                         MoneyTrackerApp.getToken(getContext()),
-                        new Callback<CategoryOptions>() {
+                        new Callback<CategoryData>() {
                             @Override
-                            public void success(CategoryOptions categoryOptions, Response response) {
+                            public void success(CategoryData categoryData, Response response) {
                                 Log.e(LOG_TAG, "Good");
                             }
 

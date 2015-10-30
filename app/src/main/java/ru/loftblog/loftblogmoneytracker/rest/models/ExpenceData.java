@@ -4,7 +4,7 @@ package ru.loftblog.loftblogmoneytracker.rest.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ExpenceOptions {
+public class ExpenceData {
 
     @Expose
     private String id;

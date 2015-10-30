@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -81,7 +83,19 @@ public class CategoriesAdapter extends SelectableAdapter<CategoriesAdapter.CardV
         }
     }
 
-    private void removeCategories(int position) {
+    public int getServId (int position) {
+        return categories.get(position).getServId();
+    }
+
+    public List<Integer> servId (List<Integer> positions) {
+        List<Integer> list = new ArrayList<>();
+        for (Integer i : positions) {
+            list.add(categories.get(i).getServId());
+        }
+        return list;
+    }
+
+    public void removeCategories(int position) {
         if (categories.get(position) != null) {
             categories.get(position).delete();
             categories.remove(position);
@@ -95,15 +109,21 @@ public class CategoriesAdapter extends SelectableAdapter<CategoriesAdapter.CardV
         notifyItemRangeRemoved(positionStart, itemCount);
     }
 
-    //Insert Categories
+    public void test(String name) {
+        Categories category = new Categories();
+        category.setTitle(name);
+        category.save();
+        categories.add(category);
+        notifyItemChanged(lastPosition);
+    }
 
-    public void insertItem(Categories category) {
+    public void insertItem(String name) {
+        Categories category = new Categories();
+        category.setTitle(name);
         category.save();
         categories.add(category);
         notifyItemInserted(getItemCount() - 1);
     }
-
-    // End of it
 
     @Override
     public int getItemCount() {
@@ -130,6 +150,7 @@ public class CategoriesAdapter extends SelectableAdapter<CategoriesAdapter.CardV
         public void onClick(View v) {
             if (clickListener != null)
                 clickListener.onItemClicked(getAdapterPosition());
+
         }
 
         @Override
