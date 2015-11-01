@@ -36,6 +36,7 @@
     <string name="nav.drawer.categories">Категории</string>
     <string name="nav.drawer.statistics">Статистика</string>
     <string name="nav.drawer.settings">Настройка</string>
+    <string name="nav.drawer.logout">Выход</string>
     <string name="name_in_drawer">Ilya Polozov</string>
     <string name="email">nlbochas@gmail.com</string>
     <string name="today">Сегодня</string>
@@ -45,4 +46,12 @@
     <string name="item_time">Item price</string>
     <string name="first_frame_butt">First Fragment</string>
     <string name="second_frame_butt">Second Fragment</string>
+    <string name="checkGoogle">checkGoogle</string>
+    <string name="content_authority">ru.loftblog.loftblogmoneytracker</string>
+    <string name="sync_account_type">loftblogmoneytracker.loftblog.ru</string>
+    <string name="remove">remove</string>
+    <string name="search">search</string>
+    <string name="titleCab">Выбрано</string>
+    <string name="cancelBtn">ОТМЕНА</string>
+    <string name="okBtn">OK</string>
 </resources>

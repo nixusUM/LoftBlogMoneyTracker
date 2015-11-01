@@ -3,54 +3,70 @@
     xmlns:card_View="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/card_height"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:layout_marginBottom="@dimen/activity_horizontal_margin"
     card_View:cardBackgroundColor="@color/backGroundDark"
-    card_View:cardCornerRadius="@dimen/card_radius"
-    card_View:cardUseCompatPadding="true">
+    card_View:cardCornerRadius="@dimen/card_radius">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="@dimen/activity_horizontal_margin">
         <TextView
             android:id="@+id/name_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textColor="@color/primary"
             android:text="@string/textName"
             android:padding="@dimen/padding_field"
             android:textSize="@dimen/text_items"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/sum_text"
+            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
         <TextView
             android:id="@+id/sum_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textColor="@color/primary"
             android:text="@string/sumName"
             android:textSize="@dimen/text_items"
             android:padding="@dimen/padding_field"
-            android:layout_alignParentTop="true"
+            android:layout_alignTop="@+id/name_text"
             android:layout_toLeftOf="@+id/categories"
             android:layout_toStartOf="@+id/categories" />
         <TextView
             android:id="@+id/categories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textColor="@color/primary"
             android:text="@string/categories"
             android:textSize="@dimen/text_items"
             android:padding="@dimen/padding_field"
-            android:layout_alignParentTop="true"
+            android:layout_alignTop="@+id/sum_text"
             android:layout_toLeftOf="@+id/date_text"
             android:layout_toStartOf="@+id/date_text" />
         <TextView
             android:id="@+id/date_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textColor="@color/primary"
             android:text="@string/itemTime"
             android:padding="@dimen/padding_field"
             android:textSize="@dimen/text_items"
-            android:layout_alignParentTop="true"
+            android:layout_alignTop="@+id/categories"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
     </RelativeLayout>
+    <View
+        android:id="@+id/selected_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primary_selected"
+        android:visibility="invisible"/>
+
 </android.support.v7.widget.CardView>
 

@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/Container.Background">
+    style="@style/Container.Background"
+    android:background="@color/backGroundDark">
     <include layout="@layout/toolbar"/>
     <GridLayout
         android:layout_width="match_parent"
@@ -16,8 +17,8 @@
             android:layout_height="wrap_content"
             android:gravity="start|center"
             android:textSize="@dimen/text_items"
-            android:typeface="monospace"
-            android:textStyle="bold"
+            android:typeface="serif"
+            android:textStyle="italic"
             android:layout_gravity="fill"
             android:layout_marginTop="@dimen/act_add_txt"
             android:text="@string/summa"
@@ -28,6 +29,7 @@
             android:inputType="numberDecimal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="italic"
             android:layout_gravity="fill"
             android:layout_marginTop="@dimen/act_add_txt"
             android:layout_row="0"
@@ -37,8 +39,8 @@
             android:layout_height="wrap_content"
             android:gravity="start|center"
             android:textSize="@dimen/text_items"
-            android:typeface="monospace"
-            android:textStyle="bold"
+            android:typeface="serif"
+            android:textStyle="italic"
             android:layout_gravity="fill"
             android:layout_marginTop="@dimen/act_add_txt"
             android:text="@string/descript"
@@ -48,6 +50,7 @@
             android:id="@+id/etDescript"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="italic"
             android:layout_gravity="fill"
             android:layout_marginTop="@dimen/act_add_txt"
             android:layout_row="1"
@@ -58,14 +61,14 @@
             android:layout_height="wrap_content"
             android:gravity="start|center"
             android:textSize="@dimen/text_items"
-            android:typeface="monospace"
-            android:textStyle="bold"
+            android:typeface="serif"
+            android:textStyle="italic"
             android:layout_gravity="fill"
             android:layout_marginTop="@dimen/act_add_txt"
             android:text="@string/categories"
             android:layout_row="2"
             android:layout_column="0" />
-        <Spinner
+        <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/etCategories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,8 +83,8 @@
             android:layout_height="wrap_content"
             android:gravity="start|center"
             android:textSize="@dimen/text_items"
-            android:typeface="monospace"
-            android:textStyle="bold"
+            android:typeface="serif"
+            android:textStyle="italic"
             android:layout_gravity="fill"
             android:layout_marginTop="@dimen/act_add_txt"
             android:text="@string/date_input"
@@ -99,16 +102,17 @@
             android:hint="@string/today"
             android:layout_row="3"
             android:layout_column="1" />
-        <Button
-            android:id="@+id/addBtnExpence"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_rounded_all"
-            android:padding="@dimen/text_items"
-            android:text="@string/add_btn_txt"
-            android:layout_marginTop="@dimen/regAct_btn_margin"
-            android:layout_gravity="center_horizontal"
-            android:layout_row="4"
-            android:layout_column="1" />
     </GridLayout>
+
+    <Button
+        android:id="@+id/addBtnExpence"
+        android:layout_width="332dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_rounded_all"
+        android:padding="@dimen/text_items"
+        android:text="@string/add_btn_txt"
+        android:layout_marginTop="@dimen/regAct_btn_margin"
+        android:layout_gravity="center_horizontal"
+        android:layout_row="4"
+        android:layout_column="1" />
 </LinearLayout>

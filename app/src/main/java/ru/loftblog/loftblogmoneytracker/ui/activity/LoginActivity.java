@@ -1,13 +1,20 @@
 package ru.loftblog.loftblogmoneytracker.ui.activity;
 
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.android.gms.common.AccountPicker;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
@@ -17,12 +24,15 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
 
+import java.io.IOException;
+
 import ru.loftblog.loftblogmoneytracker.MoneyTrackerApp;
 import ru.loftblog.loftblogmoneytracker.R;
 import ru.loftblog.loftblogmoneytracker.rest.RestService;
 import ru.loftblog.loftblogmoneytracker.rest.models.UserLoginModel;
 import ru.loftblog.loftblogmoneytracker.utils.checks.CheckNetworkConnection;
 import ru.loftblog.loftblogmoneytracker.utils.checks.CheckUserInput;
+import ru.loftblog.loftblogmoneytracker.utils.checks.GoogleScopes;
 
 import static ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus.ANOTHER_ERROR;
 import static ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus.STATUS_OK;
@@ -32,7 +42,7 @@ import static ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus.WRON
 
 
 @EActivity(R.layout.user_login_layout)
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity implements GoogleScopes {
 
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
 
@@ -67,10 +77,10 @@ public class LoginActivity extends AppCompatActivity{
 
     private void hideKeyboard() {
         View view = getCurrentFocus();
-            if (view != null) {
-                ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
-                        hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            }
+        if (view != null) {
+            ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
+                    hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
     @Background
@@ -79,7 +89,7 @@ public class LoginActivity extends AppCompatActivity{
         UserLoginModel login = restService.login(edLogin.getText().toString(),
                 edLoginPassw.getText().toString());
 
-        MoneyTrackerApp.setToken(this,login.getAuthToken());
+        MoneyTrackerApp.setToken(this, login.getAuthToken());
         try {
             if (STATUS_OK.equals(login.getStatus())) {
                 Intent openActivity = new Intent(this, MainActivity_.class);
@@ -109,11 +119,48 @@ public class LoginActivity extends AppCompatActivity{
         }
     }
 
-    @Click(R.id.regToActiv)
-    void regActivityOpen() {
-        Intent openRegAct = new Intent(this, UserRegistration_.class);
-        this.startActivity(openRegAct);
+    @Click(R.id.sign_in_button)
+    void googleWork() {
+        if (chkConnect.isOnline(this)) {
+            Intent googleIntent = AccountPicker.newChooseAccountIntent(null, null,
+                    new String[]{"com.google"}, false, null, null, null, null);
+            startActivityForResult(googleIntent, 11);
+        } else Toast.makeText(this, checkInternet, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 11 && resultCode == RESULT_OK) {
+            getGoogleToken(data);
+        }
+    }
+
+    @Background
+    void getGoogleToken(Intent data) {
+        final String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+        String googleToken = null;
+        try {
+            googleToken = GoogleAuthUtil.getToken(LoginActivity.this, accountName, SCOPES);
+        } catch (IOException e) {
+        } catch (final UserRecoverableAuthException e) {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    startActivityForResult(e.getIntent(), 11);
+                }
+            });
+        } catch (GoogleAuthException e) {
+            e.printStackTrace();
+        }
+
+        MoneyTrackerApp.setGoogleToken(LoginActivity.this, googleToken);
+        String googleShToken = MoneyTrackerApp.getGoogleToken(LoginActivity.this);
+
+        if (!googleShToken.equals("2")) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity_.class);
+            startActivity(intent);
+            finish();
+            Log.d(LOG_TAG, "key? " + googleShToken);
+        }
     }
 }
-
 

@@ -41,8 +41,8 @@
 
     <Button
         android:id="@+id/loginBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/loginBtn_width"
+        android:layout_height="@dimen/loginBtn_height"
         android:textColor="@color/white"
         android:background="@drawable/button_rounded_all"
         android:text="@string/loginButton"
@@ -50,16 +50,14 @@
         android:layout_below="@+id/edLoginPassw"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:id="@+id/regToActiv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:background="@drawable/button_rounded_all"
-        android:text="@string/registerButton"
-        android:padding="@dimen/text_items"
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="@dimen/loginBtn_width"
+        android:layout_height="@dimen/loginBtn_height"
         android:layout_below="@+id/loginBtn"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/act_add_txt" />
+        android:layout_marginTop="@dimen/padding_field"
+        android:layout_alignLeft="@+id/loginBtn"
+        android:layout_alignStart="@+id/loginBtn" />
+
 
 </RelativeLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_centerInParent="true"
+    android:layout_centerVertical="true"
+    android:background="@color/backGroundDark"
+    android:paddingBottom="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_horizontal_margin">
+
+    <TextView
+        android:id="@+id/titleDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/greenBtn"
+        android:textSize="@dimen/categor_text"/>
+
+    <EditText
+        android:id="@+id/editDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/categor_text"
+        android:hint="@string/categories"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="@dimen/dialBtn"
+        android:layout_height="wrap_content"
+        android:background="@color/backGroundDark"
+        android:textColor="@color/greenBtn"
+        android:text="@string/cancelBtn"/>
+
+    <Button
+        android:id="@+id/okButton"
+        android:layout_width="@dimen/dialBtn"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/backGroundDark"
+        android:textColor="@color/greenBtn"
+        android:text="@string/okBtn"/>
+
+    </RelativeLayout>
+</LinearLayout>
