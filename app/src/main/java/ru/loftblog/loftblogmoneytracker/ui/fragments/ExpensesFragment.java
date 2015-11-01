@@ -16,14 +16,18 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.widget.SearchView;
 
 import com.activeandroid.query.Select;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.OptionsMenuItem;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.api.BackgroundExecutor;
 
 import java.util.List;
 
@@ -33,17 +37,22 @@ import ru.loftblog.loftblogmoneytracker.database.models.Expenses;
 import ru.loftblog.loftblogmoneytracker.ui.activity.AddExpenceActivity_;
 
 @EFragment(R.layout.expenses_fragment)
+@OptionsMenu(R.menu.search_menu)
 public class ExpensesFragment extends Fragment{
 
     private ActionMode.Callback actionModeCallBack = new ActionModeCallBack();
     private ActionMode actionMode;
     private ExpensesAdapter adapter;
+    private final static String FILTER_ID = "filter_id";
 
     @ViewById(R.id.recycler_view_content)
     RecyclerView recyclerView;
 
     @ViewById(R.id.swipe_expence)
     SwipeRefreshLayout swipeRefreshLayout;
+
+    @OptionsMenuItem(R.id.search_action)
+    MenuItem menuItem;
 
     @ViewById(R.id.fab)
     FloatingActionButton fab;
@@ -64,44 +73,41 @@ public class ExpensesFragment extends Fragment{
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getDataList();
+                getDataList("");
             }
         });
         recyclerView.setLayoutManager(linearLayoutManager);
         getActivity().setTitle("Траты");
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getLoaderManager().restartLoader(0, null, new LoaderManager.LoaderCallbacks<List<Expenses>>() {
+    @Background(delay = 700, id = FILTER_ID)
+    void delayedSearch(String filter) {
+        loadData(filter);
+    }
 
+    private void loadData(final String filter) {
+        getLoaderManager().restartLoader(0, null, new LoaderManager.LoaderCallbacks<List<Expenses>>() {
             @Override
             public Loader<List<Expenses>> onCreateLoader(int id, Bundle args) {
                 final AsyncTaskLoader<List<Expenses>> loader = new AsyncTaskLoader<List<Expenses>>(getActivity()) {
-
                     @Override
                     public List<Expenses> loadInBackground() {
-                        return getDataList();
+                        return getDataList(filter);
                     }
                 };
-
                 loader.forceLoad();
                 return loader;
             }
-
             @Override
             public void onLoadFinished(Loader<List<Expenses>> loader, List<Expenses> data) {
                 swipeRefreshLayout.setRefreshing(false);
-                adapter = (new ExpensesAdapter(getDataList(), new ExpensesAdapter.CardViewHolder.ClickListener() {
+                adapter = (new ExpensesAdapter(getDataList(filter), new ExpensesAdapter.CardViewHolder.ClickListener() {
                     @Override
                     public void onItemClicked(int position) {
                         if (actionMode != null) {
                             toggleSelection(position);
                         }
-
                     }
-
                     @Override
                     public boolean onItemLongClicked(int position) {
                         if (actionMode == null) {
@@ -112,14 +118,19 @@ public class ExpensesFragment extends Fragment{
                         return true;
                     }
                 }));
-
                 recyclerView.setAdapter(adapter);
             }
-
             @Override
             public void onLoaderReset(Loader<List<Expenses>> loader) {
             }
         });
+    }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            loadData("");
+
 
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
@@ -152,9 +163,31 @@ public class ExpensesFragment extends Fragment{
         }
     }
 
-    private List<Expenses> getDataList () {
+    private List<Expenses> getDataList (String filter) {
+        return new Select()
+                .from(Expenses.class)
+                .where("name LIKE ?", new String[]{'%' + filter + '%'})
+                .execute();
+    }
 
-        return new Select().from(Expenses.class).execute();
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        final SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint(getString(R.string.search_action));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                BackgroundExecutor.cancelAll(FILTER_ID, true);
+                delayedSearch(newText);
+                return false;
+            }
+        });
     }
 
     private class ActionModeCallBack implements ActionMode.Callback {
@@ -176,10 +209,6 @@ public class ExpensesFragment extends Fragment{
             switch (item.getItemId()) {
                 case R.id.menu_removed:
                     adapter.removeItems(adapter.getSelectedItems());
-                    mode.finish();
-                    return true;
-                case R.id.menu_search:
-                    Toast.makeText(getActivity(), "Search clicked", Toast.LENGTH_SHORT).show();
                     mode.finish();
                     return true;
                 default:

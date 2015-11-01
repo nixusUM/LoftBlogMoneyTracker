@@ -35,6 +35,10 @@ public class RestService {
         return restClient.getCategoryAPI().addCategory(title, gToken, token);
     }
 
+    public CategoryWorkModel deleteCategory (Long id, String gToken, String token) {
+        return restClient.getCategoryAPI().deleteCategory(id, gToken, token);
+    }
+
     public GoogleWorkModel workGoogle (String gToken) {
         return restClient.getGoogleWorkAPI().googleJson(gToken);
     }
@@ -58,6 +62,8 @@ public class RestService {
     public ArrayList<CategExpenceModel> getAllCategoriesWithExpenses(String gToken, String token) {
         return restClient.getCategoryAPI().getAllCategoriesWithExpenses(gToken, token);
     }
+
+
 
     public BalanceModel getBalance(String gToken, String token) {
         return restClient.getBalanceAPI().getBalance(gToken, token);
