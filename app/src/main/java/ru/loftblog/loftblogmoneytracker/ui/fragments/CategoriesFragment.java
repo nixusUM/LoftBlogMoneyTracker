@@ -2,15 +2,18 @@ package ru.loftblog.loftblogmoneytracker.ui.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +46,9 @@ public class CategoriesFragment extends Fragment{
     @ViewById(R.id.recycler_view_content)
     RecyclerView recyclerView;
 
+    @ViewById(R.id.swipe_categor)
+    SwipeRefreshLayout swipeRefreshLayout;
+
     @ViewById(R.id.fab)
     FloatingActionButton fab;
 
@@ -56,6 +62,13 @@ public class CategoriesFragment extends Fragment{
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        swipeRefreshLayout.setColorSchemeColors(R.color.primary, R.color.black, R.color.fabcolor);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getDataList();
+            }
+        });
         recyclerView.setLayoutManager(linearLayoutManager);
         getActivity().setTitle("Категории");
     }
@@ -80,8 +93,8 @@ public class CategoriesFragment extends Fragment{
             }
 
             @Override
-            public void onLoadFinished
-                    (Loader<List<Categories>> loader, List<Categories> data) {
+            public void onLoadFinished(Loader<List<Categories>> loader, List<Categories> data) {
+                swipeRefreshLayout.setRefreshing(false);
                 adapter = (new CategoriesAdapter(getDataList(), new CategoriesAdapter.CardViewHolder.ClickListener() {
                 @Override
                 public void onItemClicked ( int position){
@@ -111,6 +124,24 @@ public class CategoriesFragment extends Fragment{
             public void onLoaderReset(Loader<List<Categories>> loader) {
             }
         });
+
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                adapter.removeItem(viewHolder.getAdapterPosition());
+                final Snackbar snackbar = Snackbar
+                        .make(recyclerView, "Запись удалена" , Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     private void toggleSelection(int position) {
@@ -130,7 +161,7 @@ public class CategoriesFragment extends Fragment{
     }
 
     private void alertDialog() {
-        final Dialog dialog = new Dialog(getActivity());
+        final Dialog dialog = new Dialog(getActivity(), R.style.DialogStyle);
         dialog.setContentView(R.layout.dialog_category);
         EditText editText = (EditText) dialog.findViewById(R.id.editDialog);
         TextView titleText = (TextView) dialog.findViewById(R.id.titleDialog);

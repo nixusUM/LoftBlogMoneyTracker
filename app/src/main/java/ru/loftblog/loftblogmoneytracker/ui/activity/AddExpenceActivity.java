@@ -29,7 +29,6 @@ import ru.loftblog.loftblogmoneytracker.R;
 import ru.loftblog.loftblogmoneytracker.database.models.Categories;
 import ru.loftblog.loftblogmoneytracker.database.models.Expenses;
 import ru.loftblog.loftblogmoneytracker.rest.RestService;
-import ru.loftblog.loftblogmoneytracker.rest.models.ExpenceOptions;
 import ru.loftblog.loftblogmoneytracker.rest.models.ExpencesWorkModel;
 import ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus;
 
