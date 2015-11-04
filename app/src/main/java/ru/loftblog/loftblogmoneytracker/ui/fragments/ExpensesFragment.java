@@ -77,7 +77,7 @@ public class ExpensesFragment extends Fragment{
             }
         });
         recyclerView.setLayoutManager(linearLayoutManager);
-        getActivity().setTitle("Траты");
+        getActivity().setTitle(getString(R.string.expenses));
     }
 
     @Background(delay = 700, id = FILTER_ID)
@@ -142,7 +142,7 @@ public class ExpensesFragment extends Fragment{
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 adapter.removeItem(viewHolder.getAdapterPosition());
                 final Snackbar snackbar = Snackbar
-                        .make(recyclerView, "Запись удалена" , Snackbar.LENGTH_LONG);
+                        .make(recyclerView, R.string.deleteRecord , Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         };

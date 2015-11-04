@@ -52,7 +52,6 @@ public class CategoriesAdapter extends SelectableAdapter<CategoriesAdapter.CardV
         }
     }
 
-
     public void removeItem(int position) {
         removeCategories(position);
         notifyItemRemoved(position);

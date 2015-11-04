@@ -83,7 +83,7 @@ public class CategoriesFragment extends Fragment{
             }
         });
         recyclerView.setLayoutManager(linearLayoutManager);
-        getActivity().setTitle("Категории");
+        getActivity().setTitle(getString(R.string.categoriesFragment));
     }
 
     @Override
@@ -101,7 +101,7 @@ public class CategoriesFragment extends Fragment{
                 adapter.removeItem(viewHolder.getAdapterPosition());
                 deleteCategories();
                 final Snackbar snackbar = Snackbar
-                        .make(recyclerView, "Запись удалена" , Snackbar.LENGTH_LONG);
+                        .make(recyclerView, R.string.deleteRecord , Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         };

@@ -1,11 +1,8 @@
 package ru.loftblog.loftblogmoneytracker.ui.fragments;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 
 import ru.loftblog.loftblogmoneytracker.R;
@@ -13,10 +10,8 @@ import ru.loftblog.loftblogmoneytracker.R;
 @EFragment(R.layout.settings_fragment)
 public class SettingsFragment extends Fragment{
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle("Настройки");
-        return null;
+    @AfterViews
+    void ready () {
+        getActivity().setTitle(getString(R.string.txtSettings));
     }
 }
-

@@ -37,8 +37,6 @@
     <string name="nav.drawer.statistics">Статистика</string>
     <string name="nav.drawer.settings">Настройка</string>
     <string name="nav.drawer.logout">Выход</string>
-    <string name="name_in_drawer">Ilya Polozov</string>
-    <string name="email">nlbochas@gmail.com</string>
     <string name="today">Выбрать дату траты</string>
     <string name="spalsh_text">LoftBlogMoneyTracker</string>
     <string name="text_name">Item name</string>
@@ -49,10 +47,22 @@
     <string name="checkGoogle">checkGoogle</string>
     <string name="content_authority">ru.loftblog.loftblogmoneytracker</string>
     <string name="sync_account_type">loftblogmoneytracker.loftblog.ru</string>
+    <!-- Строки Действий -->
     <string name="remove">remove</string>
     <string name="search">search</string>
     <string name="titleCab">Выбрано</string>
     <string name="cancelBtn">ОТМЕНА</string>
     <string name="okBtn">OK</string>
     <string name="search_action">Поиск</string>
+    <string name="statistics">Статистика</string>
+    <string name="options">Настройки</string>
+    <string name="expenses">Траты</string>
+    <string name="categoriesFragment">Категории</string>
+    <string name="deleteRecord">Запись удалена</string>
+    <string name="addExpenses">Добавить трату</string>
+    <string name="toastExpens">"Трата с примечанием "</string>
+    <string name="toastExpensesAdd">" добавлена!"</string>
+    <string name="pickerDialogName">datePicker</string>
+    <string name="name_in_drawer">name</string>
+    <string name="email">email</string>
 </resources>
