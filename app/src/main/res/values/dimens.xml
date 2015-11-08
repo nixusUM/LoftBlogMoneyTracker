@@ -28,7 +28,7 @@
     <dimen name="loginBtn_height">40dp</dimen>
     <dimen name="dialBtn">150dp</dimen>
     <dimen name="heigthCard">150dp</dimen>
-    <dimen name="addBtnHeight">350dp</dimen>
+    <dimen name="addBtnHeight">230dp</dimen>
     <dimen name="largeText">25dp</dimen>
     <dimen name="lineHeight">2dp</dimen>
     <dimen name="pieChartWidth">300dp</dimen>

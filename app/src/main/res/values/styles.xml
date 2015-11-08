@@ -18,10 +18,11 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:orientation">horizontal</item>
+        <item name="android:background">@drawable/background_land</item>
     </style>
 
     <style name="Container.Background">
-        <item name="android:background">@color/primary_material_light</item>
+        <item name="android:background">@drawable/background</item>
     </style>
 
     <style name="Container.Background.Dark">

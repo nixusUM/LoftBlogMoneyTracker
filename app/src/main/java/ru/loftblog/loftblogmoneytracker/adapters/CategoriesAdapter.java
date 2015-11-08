@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +17,7 @@ import java.util.List;
 
 import ru.loftblog.loftblogmoneytracker.R;
 import ru.loftblog.loftblogmoneytracker.database.models.Categories;
+import ru.loftblog.loftblogmoneytracker.database.models.Expenses;
 
 public class CategoriesAdapter extends SelectableAdapter<CategoriesAdapter.CardViewHolder>  {
 
@@ -42,6 +42,7 @@ public class CategoriesAdapter extends SelectableAdapter<CategoriesAdapter.CardV
     public void onBindViewHolder(CardViewHolder holder, int position) {
         Categories category = categories.get(position);
         holder.name.setText(category.getTitle());
+        holder.sumExpense.setText(String.format("%.2f", sumExpences(position)));
         holder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
         setAnimation(holder.cardView, position);
     }
@@ -83,6 +84,10 @@ public class CategoriesAdapter extends SelectableAdapter<CategoriesAdapter.CardV
         }
     }
 
+    public Categories getNameCategory (int position) {
+        return categories.get(position);
+    }
+
     public int getServId (int position) {
         return categories.get(position).getServId();
     }
@@ -109,20 +114,17 @@ public class CategoriesAdapter extends SelectableAdapter<CategoriesAdapter.CardV
         notifyItemRangeRemoved(positionStart, itemCount);
     }
 
-    public void test(String name) {
-        Categories category = new Categories();
-        category.setTitle(name);
-        category.save();
-        categories.add(category);
-        notifyItemChanged(lastPosition);
-    }
-
     public void insertItem(String name) {
         Categories category = new Categories();
         category.setTitle(name);
         category.save();
         categories.add(category);
         notifyItemInserted(getItemCount() - 1);
+    }
+
+    public void editCategory(int position, Categories category) {
+        category.save();
+        notifyItemChanged(position);
     }
 
     @Override
@@ -132,6 +134,7 @@ public class CategoriesAdapter extends SelectableAdapter<CategoriesAdapter.CardV
 
     public static class CardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener  {
         protected TextView name;
+        protected TextView sumExpense;
         protected View selectedOverlay;
         private ClickListener clickListener;
         protected CardView cardView;
@@ -139,6 +142,7 @@ public class CategoriesAdapter extends SelectableAdapter<CategoriesAdapter.CardV
         public CardViewHolder(View itemView,  ClickListener clickListener) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.category_item);
+            sumExpense = (TextView) itemView.findViewById(R.id.sumExpense);
             selectedOverlay = itemView.findViewById(R.id.selected_overlay);
             cardView = (CardView) itemView.findViewById(R.id.card_view_cat);
             this.clickListener = clickListener;
@@ -150,7 +154,6 @@ public class CategoriesAdapter extends SelectableAdapter<CategoriesAdapter.CardV
         public void onClick(View v) {
             if (clickListener != null)
                 clickListener.onItemClicked(getAdapterPosition());
-
         }
 
         @Override
@@ -168,5 +171,16 @@ public class CategoriesAdapter extends SelectableAdapter<CategoriesAdapter.CardV
             boolean onItemLongClicked(int position);
 
         }
+    }
+
+    private float sumExpences(int position) {
+        Categories category = categories.get(position);
+        float sum = 0f;
+        if (category != null) {
+            for (Expenses expense : category.expenses()) {
+                sum += expense.price;
+                }
+        }
+        return sum;
     }
 }

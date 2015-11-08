@@ -129,28 +129,28 @@ public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
-    private void expensesSync() {
-        RestService restService = new RestService();
-        List<Expenses> expenses = new Select().from(Expenses.class).execute();
-        if (!expenses.isEmpty()) {
-            for (Expenses expense : expenses)
-                restService.expensesSync(expense.getId().intValue(),
-                        expense.name,
-                        expense.price,
-                        expense.date,
-                        MoneyTrackerApp.getGoogleToken(getContext()),
-                        MoneyTrackerApp.getToken(getContext()),
-                        new Callback<CategoryData>() {
-                            @Override
-                            public void success(CategoryData categoryData, Response response) {
-                                Log.e(LOG_TAG, "Good");
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-                                Log.e(LOG_TAG, "Error");
-                            }
-                        });
-        }
-    }
+//    private void expensesSync() {
+//        RestService restService = new RestService();
+//        List<Expenses> expenses = new Select().from(Expenses.class).execute();
+//        if (!expenses.isEmpty()) {
+//            for (Expenses expense : expenses)
+//                restService.expensesSync(expense.getId().intValue(),
+//                        expense.name,
+//                        expense.price,
+//                        expense.date,
+//                        MoneyTrackerApp.getGoogleToken(getContext()),
+//                        MoneyTrackerApp.getToken(getContext()),
+//                        new Callback<CategoryData>() {
+//                            @Override
+//                            public void success(CategoryData categoryData, Response response) {
+//                                Log.e(LOG_TAG, "Good");
+//                            }
+//
+//                            @Override
+//                            public void failure(RetrofitError error) {
+//                                Log.e(LOG_TAG, "Error");
+//                            }
+//                        });
+//        }
+//    }
 }

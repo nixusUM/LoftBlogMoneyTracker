@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +31,10 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.OptionsMenuItem;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.api.BackgroundExecutor;
 
 import java.util.List;
 
@@ -46,18 +50,23 @@ import ru.loftblog.loftblogmoneytracker.utils.checks.CheckNetworkConnection;
 import ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus;
 
 @EFragment(R.layout.categories_fragment)
+@OptionsMenu(R.menu.search_menu)
 public class CategoriesFragment extends Fragment{
 
     private static final String LOG_TAG = "CategoriesFragment";
     private ActionMode.Callback actionModeCallBack = new ActionModeCallBack();
     private ActionMode actionMode;
     private CategoriesAdapter adapter;
+    private final static String FILTER_ID = "filter_id";
 
     @ViewById(R.id.recycler_view_content)
     RecyclerView recyclerView;
 
     @ViewById(R.id.swipe_categor)
     SwipeRefreshLayout swipeRefreshLayout;
+
+    @OptionsMenuItem(R.id.search_action)
+    MenuItem menuItem;
 
     @ViewById(R.id.fab)
     FloatingActionButton fab;
@@ -69,7 +78,6 @@ public class CategoriesFragment extends Fragment{
 
     @AfterViews
     void setupList() {
-        loadData();
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -77,17 +85,22 @@ public class CategoriesFragment extends Fragment{
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getAllCategories();
+                loadData("");
             }
         });
         recyclerView.setLayoutManager(linearLayoutManager);
         getActivity().setTitle(getString(R.string.categoriesFragment));
     }
 
+    @Background(delay = 700, id = FILTER_ID)
+    void delayedSearch(String filter) {
+        loadData(filter);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        loadData();
+        loadData("");
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -108,7 +121,7 @@ public class CategoriesFragment extends Fragment{
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    private void loadData() {
+    private void loadData(final String filter) {
         getLoaderManager().restartLoader(0, null, new LoaderManager.LoaderCallbacks<List<Categories>>() {
 
             @Override
@@ -117,8 +130,7 @@ public class CategoriesFragment extends Fragment{
 
                     @Override
                     public List<Categories> loadInBackground() {
-                        swipeRefreshLayout.setRefreshing(false);
-                        return getDataList();
+                        return getDataList(filter);
                     }
                 };
 
@@ -128,8 +140,8 @@ public class CategoriesFragment extends Fragment{
 
             @Override
             public void onLoadFinished(Loader<List<Categories>> loader, List<Categories> data) {
-
-                adapter = (new CategoriesAdapter(getDataList(), new CategoriesAdapter.CardViewHolder.ClickListener() {
+                swipeRefreshLayout.setRefreshing(false);
+                adapter = (new CategoriesAdapter(getDataList(filter), new CategoriesAdapter.CardViewHolder.ClickListener() {
                     @Override
                     public void onItemClicked(int position) {
                         if (actionMode != null) {
@@ -223,13 +235,9 @@ public class CategoriesFragment extends Fragment{
         if (CheckNetworkConnection.isOnline(getContext())) {
             CategoryWorkModel workModel = restService.editCategory(name, id, MoneyTrackerApp.getGoogleToken(getContext())
                     , MoneyTrackerApp.getToken(getContext()));
-            if (LoginUserStatus.STATUS_OK.equals(workModel.getStatus())) {
-                category.delete();
-                category.setTitle(workModel.getCategories().getTitle());
-                category.save();
-            }
+            if (LoginUserStatus.STATUS_OK.equals(workModel.getStatus()))
+                Log.d(LOG_TAG, "Respons title" + ":" + category.getTitle());
         }
-        Log.d(LOG_TAG, "Respons title" + ":" + category.getTitle());
     }
 
     private void toggleSelection(int position) {
@@ -244,11 +252,35 @@ public class CategoriesFragment extends Fragment{
         }
     }
 
-    private List<Categories> getDataList () {
-        return new Select().from(Categories.class).execute();
+    private List<Categories> getDataList (String filter) {
+        return new Select()
+                .from(Categories.class)
+                .where("title LIKE ?", new String[]{'%' + filter + '%'})
+                .execute();
     }
 
-    private void alerDialogEdit(final int id) {
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        final SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint(getString(R.string.search_action));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                BackgroundExecutor.cancelAll(FILTER_ID, true);
+                delayedSearch(newText);
+                return false;
+            }
+        });
+    }
+
+    private void alerDialogEdit(final int postion) {
+        final Categories category = adapter.getNameCategory(postion);
         final Dialog dialog = new Dialog(getActivity(), R.style.DialogStyle);
         dialog.setContentView(R.layout.dialog_category);
         EditText editText = (EditText) dialog.findViewById(R.id.editDialog);
@@ -260,9 +292,10 @@ public class CategoriesFragment extends Fragment{
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                adapter.removeItem(id);
-                adapter.test(text.toString());
-                editCategories(text.toString(), adapter.getServId(id));
+                Toast.makeText(getActivity(), getString(R.string.toastAddCateg) + getString(R.string.toastEditCat), Toast.LENGTH_SHORT).show();
+                category.setTitle(text.toString());
+                adapter.editCategory(postion, category);
+                editCategories(text.toString(), adapter.getServId(postion));
                 dialog.dismiss();
             }
         });
@@ -288,7 +321,7 @@ public class CategoriesFragment extends Fragment{
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Категория: " + text.toString() + " добавлена", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.toastAddCateg) + text.toString() + getString(R.string.toastAddCateg_), Toast.LENGTH_SHORT).show();
                 adapter.insertItem(text.toString());
                 sendToSiteCategories(text.toString());
                 dialog.dismiss();

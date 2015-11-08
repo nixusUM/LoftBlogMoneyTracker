@@ -56,7 +56,7 @@ public class RestService {
         return restClient.getExpensesAPI().getAllExpenses(gToken, token);
     }
 
-    public ExpencesWorkModel addExpense(String sum,  String comment, int categoryId, String trDate, String gToken, String token) {
+    public ExpencesWorkModel addExpense(float sum,  String comment, int categoryId, String trDate, String gToken, String token) {
         return restClient.getExpensesAPI().addExpense(sum, comment, categoryId, trDate, gToken, token);
     }
 

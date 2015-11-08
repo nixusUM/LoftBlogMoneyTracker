@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.activeandroid.query.Select;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
@@ -15,13 +16,16 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 import ru.loftblog.loftblogmoneytracker.R;
+import ru.loftblog.loftblogmoneytracker.database.models.Categories;
+import ru.loftblog.loftblogmoneytracker.database.models.Expenses;
 
 @EFragment(R.layout.statistics_fragment)
 public class StatisticsFragment extends Fragment{
@@ -31,18 +35,27 @@ public class StatisticsFragment extends Fragment{
 
     private PieChart mChart;
 
-    private float[] yData = {8, 10, 15, 30, 40};
-    private String[] xData = {"Категория1", "Категория2", "Категория3", "Категория4", "Категория5"};
+    private ArrayList<Entry> yData;
+    private ArrayList<String> xData ;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+            insertData();
+            drawPieChart();
+        }
 
 
-    @AfterViews
-    void ready () {
+    private void drawPieChart(){
         getActivity().setTitle(getString(R.string.statistics));
         mChart = new PieChart(getContext());
         mainLayot.addView(mChart);
         mainLayot.setBackgroundColor(getResources().getColor(R.color.backGroundDark));
         mChart.setUsePercentValues(true);
+        mChart.setExtraOffsets(5, 10, 5, 5);
+        mChart.setDragDecelerationFrictionCoef(0.95f);
         mChart.setDescription(getString(R.string.statistics));
+        mChart.animateXY(1500, 1500);
         mChart.setDescriptionTextSize(15f);
         mChart.setDrawHoleEnabled(true);
         mChart.setHoleColorTransparent(true);
@@ -54,9 +67,11 @@ public class StatisticsFragment extends Fragment{
         mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+
                 if (e == null)
                     return;
-                Toast.makeText(getContext(), xData[e.getXIndex()] + " ~ " + e.getVal() + "%", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), xData.get(e.getXIndex()) + ": " +
+                            yData.get(e.getXIndex()).getVal() , Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -64,6 +79,7 @@ public class StatisticsFragment extends Fragment{
 
             }
         });
+
         addData();
         Legend l = mChart.getLegend();
         l.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
@@ -73,16 +89,30 @@ public class StatisticsFragment extends Fragment{
         l.setYOffset(0f);
     }
 
+    private void insertData() {
+
+        List<Categories> categories = new Select().from(Categories.class).execute();
+
+        if (categories != null) {
+            xData = new ArrayList<>();
+            yData = new ArrayList<>();
+
+            for (Categories category : categories) {
+                float sum = 0f;
+                for (Expenses expense : category.expenses()) {
+                    sum += expense.getPrice();
+                }
+                if (sum != 0) {
+                    xData.add(category.title);
+                    yData.add(new Entry(sum, xData.size() - 1));
+                }
+            }
+        }
+    }
+
     private void addData() {
-        ArrayList<Entry> yValsl = new ArrayList<>();
-        for (int i = 0; i < yData.length; i ++)
-            yValsl.add(new Entry(yData[i], i));
 
-        ArrayList<String> xValsl = new ArrayList<>();
-        for (int i = 0; i < xData.length; i ++)
-            xValsl.add(xData[i]);
-
-        PieDataSet dataset = new PieDataSet(yValsl, "");
+        PieDataSet dataset = new PieDataSet(yData, "");
         dataset.setSliceSpace(5);
         dataset.setSelectionShift(8);
 
@@ -105,7 +135,7 @@ public class StatisticsFragment extends Fragment{
 
         colors.add(ColorTemplate.getHoloBlue());
         dataset.setColors(colors);
-        PieData data = new PieData(xValsl, dataset);
+        PieData data = new PieData(xData, dataset);
         data.setValueFormatter(new PercentFormatter());
         data.setValueTextSize(11f);
         data.setValueTextColor(Color.GRAY);

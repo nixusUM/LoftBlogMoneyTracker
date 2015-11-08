@@ -13,7 +13,7 @@ public interface ExpensesAPI {
                                     @Query("auth_token") String token);
 
     @GET("/transactions/add")
-    ExpencesWorkModel addExpense(@Query("sum") String sum,
+    ExpencesWorkModel addExpense(@Query("sum") float sum,
                                 @Query("comment") String comment,
                                 @Query("category_id") int categoryId,
                                 @Query("tr_date") String trDate,

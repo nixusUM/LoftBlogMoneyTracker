@@ -30,7 +30,6 @@ import ru.loftblog.loftblogmoneytracker.database.models.Categories;
 import ru.loftblog.loftblogmoneytracker.rest.RestService;
 import ru.loftblog.loftblogmoneytracker.rest.models.AllCategoriesModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategoryData;
-import ru.loftblog.loftblogmoneytracker.rest.models.CategoryWorkModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.GoogleWorkModel;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.CategoriesFragment_;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.ExpensesFragment_;
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getAllCategories();
-
+        defaultCategories();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ExpensesFragment_()).commit();
         }
@@ -113,6 +112,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
+        }
+    }
+
+    private void defaultCategories() {
+        List<Categories> categories = new Select().from(Categories.class).execute();
+        if (categories.isEmpty()) {
+            new Categories("Fun").save();
+            new Categories("Clothes").save();
+            new Categories("Food").save();
+            new Categories("Travels").save();
         }
     }
 

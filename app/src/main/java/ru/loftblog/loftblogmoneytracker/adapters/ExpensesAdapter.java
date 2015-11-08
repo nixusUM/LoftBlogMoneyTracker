@@ -40,7 +40,7 @@ public class ExpensesAdapter extends SelectableAdapter<ExpensesAdapter.CardViewH
     public void onBindViewHolder(CardViewHolder holder, int position) {
         Expenses expense = expenses.get(position);
         holder.name.setText(expense.getName());
-        holder.sum.setText(String.valueOf(expense.getPrice()));
+        holder.sum.setText(String.format("%.2f", expense.price));
         holder.category.setText(expense.categories.toString());
         holder.date.setText(expense.getDate());
         holder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
@@ -138,7 +138,6 @@ public class ExpensesAdapter extends SelectableAdapter<ExpensesAdapter.CardViewH
             }
             return false;
         }
-
 
         public interface ClickListener {
 

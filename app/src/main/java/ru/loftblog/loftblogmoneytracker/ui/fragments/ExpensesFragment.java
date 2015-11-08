@@ -73,7 +73,7 @@ public class ExpensesFragment extends Fragment{
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getDataList("");
+                loadData("");
             }
         });
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -222,4 +222,5 @@ public class ExpensesFragment extends Fragment{
             actionMode = null;
         }
     }
+
 }

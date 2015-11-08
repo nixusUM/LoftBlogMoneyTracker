@@ -41,6 +41,11 @@ public class Categories extends Model {
         this.servId = servId;
     }
 
+    public Categories(String title) {
+        super();
+        this.title = title;
+    }
+
     @Override
     public String toString() {
         return title;
