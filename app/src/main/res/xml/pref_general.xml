@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_notification_section">
+        <CheckBoxPreference
+            android:textSize="@dimen/largeText"
+            android:title="@string/pref_enable_notifications_label"
+            android:key="@string/pref_enable_notifications_key"
+            android:summaryOff="@string/pref_enable_notifications_false"
+            android:summaryOn="@string/pref_enable_notifications_true"
+            android:defaultValue="@string/pref_enable_notifications_default"/>
+        <CheckBoxPreference
+            android:textSize="@dimen/field_size"
+            android:title="@string/sound_enable_notifications_label"
+            android:key="@string/sound_enable_notifications_key"
+            android:summaryOff="@string/sound_enable_notifications_false"
+            android:summaryOn="@string/sound_enable_notifications_true"
+            android:defaultValue="@string/sound_enable_notifications_default"/>
+        <CheckBoxPreference
+            android:textSize="@dimen/field_size"
+            android:title="@string/vibra_enable_notifications_label"
+            android:key="@string/vibra_enable_notifications_key"
+            android:summaryOff="@string/vibra_enable_notifications_false"
+            android:summaryOn="@string/vibra_enable_notifications_true"
+            android:defaultValue="@string/vibra_enable_notifications_default"/>
+        <CheckBoxPreference
+            android:textSize="@dimen/field_size"
+            android:title="@string/light_enable_notifications_label"
+            android:key="@string/light_enable_notifications_key"
+            android:summaryOff="@string/light_enable_notifications_false"
+            android:summaryOn="@string/light_enable_notifications_true"
+            android:defaultValue="@string/light_enable_notifications_default"/>
+    </PreferenceCategory>
+</PreferenceScreen>

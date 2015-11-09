@@ -1,17 +1,22 @@
 <resources>
+    <!-- App Strings -->
     <string name="app_name">LoftBlogMoneyTracker</string>
     <string name="action_settings">Settings</string>
-    <string name="textName">Item name</string>
+    <string name="textName">Категория</string>
     <string name="sumName">Item price</string>
     <string name="itemTime">Item price</string>
-    <string name="txtStat">Здесь будет статистика</string>
-    <string name="txtSettings">Здесь будут настройки</string>
+    <string name="txtStat">Статистика</string>
+    <string name="txtSettings">Настройки</string>
     <string name="summa">Сумма</string>
-    <string name="descript">Примечание</string>
+    <string name="summaHint">Введите сумму</string>
+    <string name="descript">Наименование</string>
+    <string name="descriptHint">Введите наименование</string>
     <string name="categories">Категория</string>
+    <string name="categoriesEdit">Новая категория</string>
     <string name="date_input">Дата</string>
     <string name="click_fab_text">Нажал</string>
     <string name="add_btn_txt">ДОБАВИТЬ ТРАТУ</string>
+    <string name="rMoney">Rub</string>
     <!-- Строики в авторизации и регистрации -->
     <string name="etTextEmpty">Поле не должно быть пустым!</string>
     <string name="logText">Логин занят</string>
@@ -37,8 +42,8 @@
     <string name="nav.drawer.statistics">Статистика</string>
     <string name="nav.drawer.settings">Настройка</string>
     <string name="nav.drawer.logout">Выход</string>
-    <string name="today">Выбрать дату траты</string>
-    <string name="spalsh_text">LoftBlogMoneyTracker</string>
+    <string name="today">ВЫБОР ДАТЫ</string>
+    <string name="spalsh_text">Money Tracker</string>
     <string name="text_name">Item name</string>
     <string name="sum_name">Item price</string>
     <string name="item_time">Item price</string>
@@ -65,4 +70,42 @@
     <string name="pickerDialogName">datePicker</string>
     <string name="name_in_drawer">name</string>
     <string name="email">email</string>
+
+    <!-- Strings related to Notification Enabled preference -->
+    <string name="pref_enable_notifications_key" translatable="false">enable_notifications</string>
+    <string name="pref_enable_notifications_label">Включить уведомления</string>
+    <string name="pref_enable_notifications_true">Enabled</string>
+    <string name="pref_enable_notifications_false">Not Enabled</string>
+    <string name="pref_enable_notifications_default" translatable="false">true</string>
+
+    <!-- Sound Notifications Preference -->
+    <string name="sound_enable_notifications_key" translatable="false">sound_notifications</string>
+    <string name="sound_enable_notifications_label">Звуковые уведомления</string>
+    <string name="sound_enable_notifications_true">Enabled</string>
+    <string name="sound_enable_notifications_false">Not Enabled</string>
+    <string name="sound_enable_notifications_default" translatable="false">true</string>
+
+    <!-- Vibra Notifications Preference -->
+    <string name="vibra_enable_notifications_key" translatable="false">vibra_notifications</string>
+    <string name="vibra_enable_notifications_label">Вибрация</string>
+    <string name="vibra_enable_notifications_true">Enabled</string>
+    <string name="vibra_enable_notifications_false">Not Enabled</string>
+    <string name="vibra_enable_notifications_default" translatable="false">true</string>
+
+    <!-- Light's Notifications Preference -->
+    <string name="light_enable_notifications_key" translatable="false">light_notifications</string>
+    <string name="light_enable_notifications_label">Светодиод</string>
+    <string name="light_enable_notifications_true">Enabled</string>
+    <string name="light_enable_notifications_false">Not Enabled</string>
+    <string name="light_enable_notifications_default" translatable="false">true</string>
+
+    <!-- String for notification bar-->
+    <string name="notification_message">Пришло уведомление!</string>
+    <string name="pref_notification_section">Уведомления</string>
+    <string name="sumExpence">Сумма трат</string>
+    <string name="toastAddCateg">"Категория: "</string>
+    <string name="toastAddCateg_">" добавлена"</string>
+    <string name="toastEditCat">" отредактирована!"</string>
+    <string name="errorToastItem">Добавьте сначала категорию!</string>
+
 </resources>

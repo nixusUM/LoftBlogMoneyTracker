@@ -3,15 +3,17 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@style/Container.Background"
-    android:background="@color/backGroundDark">
+    android:weightSum="1">
     <include layout="@layout/toolbar"/>
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="2"
-        android:rowCount="5"
+        android:rowCount="9"
         android:background="@color/backGroundDark"
-        android:padding="@dimen/act_add_txt">
+        android:padding="@dimen/act_add_txt"
+        android:layout_weight="0.51">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,6 +28,9 @@
             android:layout_column="0" />
         <EditText
             android:id="@+id/etPrice"
+            android:gravity="end"
+            android:maxWidth="@dimen/act_add_txt"
+            android:hint="@string/summaHint"
             android:inputType="numberDecimal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,12 +56,16 @@
             android:id="@+id/etDescript"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:hint="@string/descriptHint"
+            android:maxWidth="@dimen/act_add_txt"
+            android:gravity="end"
             android:textStyle="italic"
             android:layout_gravity="fill"
             android:layout_marginTop="@dimen/act_add_txt"
             android:paddingRight="@dimen/margintop_txt"
             android:layout_row="1"
             android:layout_column="1" />
+
         <TextView
             android:id="@+id/add_category"
             android:layout_width="wrap_content"
@@ -68,17 +77,20 @@
             android:layout_gravity="fill"
             android:layout_marginTop="@dimen/act_add_txt"
             android:text="@string/categories"
-            android:layout_row="2"
+            android:layout_row="4"
             android:layout_column="0" />
-        <android.support.v7.widget.AppCompatSpinner
+
+        <Spinner
             android:id="@+id/etCategories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/text_items"
             android:layout_gravity="fill"
             android:layout_marginTop="@dimen/act_add_txt"
-            android:layout_row="2"
+            android:layout_row="4"
             android:layout_column="1"
             android:spinnerMode="dropdown" />
+
         <TextView
             android:id="@+id/add_date"
             android:layout_width="wrap_content"
@@ -90,32 +102,38 @@
             android:layout_gravity="fill"
             android:layout_marginTop="@dimen/act_add_txt"
             android:text="@string/date_input"
-            android:layout_row="3"
+            android:layout_row="7"
             android:layout_column="0" />
+
         <TextView
             android:id="@+id/etToday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:gravity="center_horizontal"
             android:textSize="@dimen/text_items"
             android:paddingRight="@dimen/margintop_txt"
-            android:typeface="sans"
+            android:typeface="serif"
             android:onClick="showDatePickerDialog"
             android:textStyle="bold"
-            android:layout_gravity="fill"
+            android:layout_gravity="fill_horizontal"
             android:layout_marginTop="@dimen/act_add_txt"
             android:hint="@string/today"
-            android:layout_row="3"
+            android:layout_row="7"
             android:layout_column="1" />
 
     </GridLayout>
 
     <Button
         android:id="@+id/addBtnExpence"
-        android:layout_width="@dimen/addBtnHeight"
+        android:layout_width="339dp"
         android:layout_height="wrap_content"
         android:background="@drawable/button_rounded_all"
         android:padding="@dimen/text_items"
         android:text="@string/add_btn_txt"
         android:layout_marginTop="@dimen/regAct_btn_margin"
+        android:layout_row="6"
+        android:layout_column="1"
         android:layout_gravity="center_horizontal" />
+
 </LinearLayout>

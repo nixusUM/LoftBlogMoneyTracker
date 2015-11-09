@@ -8,7 +8,7 @@ import com.activeandroid.annotation.Table;
 public class Expenses extends Model {
 
     @Column(name = "price")
-    public String price;
+    public float price;
 
     @Column(name = "name")
     public String name;
@@ -16,11 +16,11 @@ public class Expenses extends Model {
     @Column(name = "date")
     public String date;
 
-    public String getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 
@@ -44,7 +44,7 @@ public class Expenses extends Model {
         super();
     }
 
-    public Expenses (String price, String name, String date, Categories categories){
+    public Expenses (float price, String name, String date, Categories categories){
         super();
         this.price = price;
         this.name = name;

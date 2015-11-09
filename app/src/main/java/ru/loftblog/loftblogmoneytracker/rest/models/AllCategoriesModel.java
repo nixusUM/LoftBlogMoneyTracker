@@ -3,23 +3,16 @@ package ru.loftblog.loftblogmoneytracker.rest.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ExpencesWorkModel {
+import java.util.ArrayList;
+import java.util.List;
+
+public class AllCategoriesModel {
 
     @Expose
     private String status;
-    @Expose
-    private Integer id;
     @SerializedName("data")
     @Expose
-    private ExpenceData expenses ;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private List<CategoryData> categories = new ArrayList<>();
 
     /**
      *
@@ -44,17 +37,17 @@ public class ExpencesWorkModel {
      * @return
      * The data
      */
-    public ExpenceData getExpenses() {
-        return expenses;
+    public List<CategoryData> getCategories() {
+        return categories;
     }
 
     /**
      *
-     * @param expenses
+     * @param categoriesItems
      * The data
      */
-    public void setExpenses(ExpenceData expenses) {
-        this.expenses = expenses;
+    public void setCategories(List<CategoryData> categoriesItems) {
+        this.categories = categoriesItems;
     }
-}
 
+}

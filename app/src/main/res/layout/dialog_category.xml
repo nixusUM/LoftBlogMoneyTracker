@@ -32,27 +32,27 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    
-    <Button
-        android:id="@+id/cancelButton"
-        android:layout_width="@dimen/dialBtn"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:background="@color/backGroundDark"
-        android:textColor="@color/greenBtn"
-        android:text="@string/cancelBtn"/>
 
-    <Button
-        android:id="@+id/okButton"
-        android:layout_width="@dimen/dialBtn"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:background="@color/backGroundDark"
-        android:textColor="@color/greenBtn"
-        android:text="@string/okBtn"/>
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="@dimen/dialBtn"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:background="@color/backGroundDark"
+            android:textColor="@color/greenBtn"
+            android:text="@string/cancelBtn"/>
+
+        <Button
+            android:id="@+id/okButton"
+            android:layout_width="@dimen/dialBtn"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/backGroundDark"
+            android:textColor="@color/greenBtn"
+            android:text="@string/okBtn"/>
 
     </RelativeLayout>
 </LinearLayout>

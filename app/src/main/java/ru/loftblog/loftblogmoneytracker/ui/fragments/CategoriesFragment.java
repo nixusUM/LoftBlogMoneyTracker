@@ -34,6 +34,7 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.OptionsMenuItem;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.api.BackgroundExecutor;
 
 import java.util.List;
 
@@ -42,24 +43,30 @@ import ru.loftblog.loftblogmoneytracker.adapters.CategoriesAdapter;
 import ru.loftblog.loftblogmoneytracker.R;
 import ru.loftblog.loftblogmoneytracker.database.models.Categories;
 import ru.loftblog.loftblogmoneytracker.rest.RestService;
-import ru.loftblog.loftblogmoneytracker.rest.models.CategoryOptions;
+import ru.loftblog.loftblogmoneytracker.rest.models.AllCategoriesModel;
+import ru.loftblog.loftblogmoneytracker.rest.models.CategoryData;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategoryWorkModel;
 import ru.loftblog.loftblogmoneytracker.utils.checks.CheckNetworkConnection;
 import ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus;
 
 @EFragment(R.layout.categories_fragment)
+@OptionsMenu(R.menu.search_menu)
 public class CategoriesFragment extends Fragment{
 
     private static final String LOG_TAG = "CategoriesFragment";
     private ActionMode.Callback actionModeCallBack = new ActionModeCallBack();
     private ActionMode actionMode;
     private CategoriesAdapter adapter;
+    private final static String FILTER_ID = "filter_id";
 
     @ViewById(R.id.recycler_view_content)
     RecyclerView recyclerView;
 
     @ViewById(R.id.swipe_categor)
     SwipeRefreshLayout swipeRefreshLayout;
+
+    @OptionsMenuItem(R.id.search_action)
+    MenuItem menuItem;
 
     @ViewById(R.id.fab)
     FloatingActionButton fab;
@@ -71,7 +78,6 @@ public class CategoriesFragment extends Fragment{
 
     @AfterViews
     void setupList() {
-        loadDate();
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -79,17 +85,22 @@ public class CategoriesFragment extends Fragment{
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getAllCategories();
+                loadData("");
             }
         });
         recyclerView.setLayoutManager(linearLayoutManager);
         getActivity().setTitle(getString(R.string.categoriesFragment));
     }
 
+    @Background(delay = 700, id = FILTER_ID)
+    void delayedSearch(String filter) {
+        loadData(filter);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        loadDate();
+        loadData("");
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -98,8 +109,8 @@ public class CategoriesFragment extends Fragment{
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                deleteCategories(adapter.getServId(viewHolder.getAdapterPosition()));
                 adapter.removeItem(viewHolder.getAdapterPosition());
-                deleteCategories();
                 final Snackbar snackbar = Snackbar
                         .make(recyclerView, R.string.deleteRecord , Snackbar.LENGTH_LONG);
                 snackbar.show();
@@ -110,7 +121,7 @@ public class CategoriesFragment extends Fragment{
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    private void loadDate() {
+    private void loadData(final String filter) {
         getLoaderManager().restartLoader(0, null, new LoaderManager.LoaderCallbacks<List<Categories>>() {
 
             @Override
@@ -119,7 +130,7 @@ public class CategoriesFragment extends Fragment{
 
                     @Override
                     public List<Categories> loadInBackground() {
-                        return getDataList();
+                        return getDataList(filter);
                     }
                 };
 
@@ -130,11 +141,14 @@ public class CategoriesFragment extends Fragment{
             @Override
             public void onLoadFinished(Loader<List<Categories>> loader, List<Categories> data) {
                 swipeRefreshLayout.setRefreshing(false);
-                adapter = (new CategoriesAdapter(getDataList(), new CategoriesAdapter.CardViewHolder.ClickListener() {
+                adapter = (new CategoriesAdapter(getDataList(filter), new CategoriesAdapter.CardViewHolder.ClickListener() {
                     @Override
                     public void onItemClicked(int position) {
                         if (actionMode != null) {
                             toggleSelection(position);
+                        }
+                        if (actionMode == null) {
+                            alerDialogEdit(position);
                         }
                     }
 
@@ -158,44 +172,71 @@ public class CategoriesFragment extends Fragment{
         });
     }
 
-
     @Background
     void getAllCategories() {
         RestService restService = new RestService();
         if (CheckNetworkConnection.isOnline(getContext())) {
-            CategoryWorkModel getCategories = restService.getAllCategories(MoneyTrackerApp.getGoogleToken(getContext()),
+            AllCategoriesModel getCategories = restService.getAllCategories(MoneyTrackerApp.getGoogleToken(getContext()),
                     MoneyTrackerApp.getToken(getContext()));
             if (LoginUserStatus.STATUS_OK.equals(getCategories.getStatus())) {
-                for (CategoryOptions category : getCategories.getCategories()) {
-                    Log.e(LOG_TAG, "Category name: " + category.getTitle() +
-                            ", Category id: " + category.getId());
+                for (CategoryData category : getCategories.getCategories()) {
+                    Log.e(LOG_TAG, "name: " + category.getTitle() +
+                            ", id: " + category.getId());
                 }
             }
         }
     }
 
     @Background
-    void deleteCategories() {
-        Categories category = new Categories();
+    void deleteCategories(int servId) {
         RestService restService = new RestService();
         if (CheckNetworkConnection.isOnline(getContext())) {
-            CategoryWorkModel delCategories = restService.deleteCategory(category.getId(),
-                    MoneyTrackerApp.getGoogleToken(getContext()),
+            CategoryWorkModel workModel = restService.deleteCategory(servId, MoneyTrackerApp.getGoogleToken(getContext()),
                     MoneyTrackerApp.getToken(getContext()));
-//            Log.d(LOG_TAG, "Categry" + category.getId());
+            if (LoginUserStatus.STATUS_OK.equals(workModel.getStatus())) {
+                Log.d(LOG_TAG, "Delete category "  + workModel.getCategories().getTitle());
+            }
         }
     }
 
     @Background
-    public void sendToSiteCategories() {
+    void deleteCategories(List<Integer>  stackCategories) {
         RestService restService = new RestService();
-        CategoryWorkModel categoryAdd = null;
-        List<Categories> categoriesList = new Select().from(Categories.class).execute();
-        if (categoriesList.isEmpty()) {
-            for (Categories category : categoriesList) {
-                categoryAdd = restService.addCategory(category.title, MoneyTrackerApp.getGoogleToken(getContext())
-                        , MoneyTrackerApp.getToken(getContext()));
+        if (CheckNetworkConnection.isOnline(getContext())) {
+            for (int i = 0; i < stackCategories.size(); i++) {
+                CategoryWorkModel workModel = restService.deleteCategory(stackCategories.get(i), MoneyTrackerApp.getGoogleToken(getContext()),
+                        MoneyTrackerApp.getToken(getContext()));
+                if (LoginUserStatus.STATUS_OK.equals(workModel.getStatus())) {
+                    Log.d(LOG_TAG, "Delete category "  + workModel.getCategories().getTitle());
+                }
             }
+        }
+    }
+
+    @Background
+    public void sendToSiteCategories(String name) {
+        RestService restService = new RestService();
+        Categories category = new Select().from(Categories.class).where("title = ?", name).executeSingle();
+        if (CheckNetworkConnection.isOnline(getContext())) {
+            CategoryWorkModel workModel = restService.addCategory(name, MoneyTrackerApp.getGoogleToken(getContext())
+                    , MoneyTrackerApp.getToken(getContext()));
+            if (LoginUserStatus.STATUS_OK.equals(workModel.getStatus())) {
+                category.setServId(workModel.getCategories().getId());
+                category.save();
+            }
+            Log.d(LOG_TAG, "title" + category.getTitle() + "servId" + category.getServId());
+        }
+    }
+
+    @Background
+    public void editCategories(String name, int id) {
+        RestService restService = new RestService();
+        Categories category = new Select().from(Categories.class).where("title = ?", name).executeSingle();
+        if (CheckNetworkConnection.isOnline(getContext())) {
+            CategoryWorkModel workModel = restService.editCategory(name, id, MoneyTrackerApp.getGoogleToken(getContext())
+                    , MoneyTrackerApp.getToken(getContext()));
+            if (LoginUserStatus.STATUS_OK.equals(workModel.getStatus()))
+                Log.d(LOG_TAG, "Respons title" + ":" + category.getTitle());
         }
     }
 
@@ -211,8 +252,61 @@ public class CategoriesFragment extends Fragment{
         }
     }
 
-    private List<Categories> getDataList () {
-        return new Select().from(Categories.class).execute();
+    private List<Categories> getDataList (String filter) {
+        return new Select()
+                .from(Categories.class)
+                .where("title LIKE ?", new String[]{'%' + filter + '%'})
+                .execute();
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        final SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint(getString(R.string.search_action));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                BackgroundExecutor.cancelAll(FILTER_ID, true);
+                delayedSearch(newText);
+                return false;
+            }
+        });
+    }
+
+    private void alerDialogEdit(final int postion) {
+        final Categories category = adapter.getNameCategory(postion);
+        final Dialog dialog = new Dialog(getActivity(), R.style.DialogStyle);
+        dialog.setContentView(R.layout.dialog_category);
+        EditText editText = (EditText) dialog.findViewById(R.id.editDialog);
+        TextView titleText = (TextView) dialog.findViewById(R.id.titleDialog);
+        final Editable text = editText.getText();
+        titleText.setText(getResources().getString(R.string.categoriesEdit));
+        Button okButton = (Button) dialog.findViewById(R.id.okButton);
+        Button cncButton = (Button) dialog.findViewById(R.id.cancelButton);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), getString(R.string.toastAddCateg) + getString(R.string.toastEditCat), Toast.LENGTH_SHORT).show();
+                category.setTitle(text.toString());
+                adapter.editCategory(postion, category);
+                editCategories(text.toString(), adapter.getServId(postion));
+                dialog.dismiss();
+            }
+        });
+        cncButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
     }
 
     private void alertDialog() {
@@ -227,11 +321,9 @@ public class CategoriesFragment extends Fragment{
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Categories category = new Categories();
-                Toast.makeText(getActivity(), "Категория: " + text.toString() + " добавлена", Toast.LENGTH_SHORT).show();
-                category.setTitle(text.toString());
-                sendToSiteCategories();
-                adapter.insertItem(category);
+                Toast.makeText(getActivity(), getString(R.string.toastAddCateg) + text.toString() + getString(R.string.toastAddCateg_), Toast.LENGTH_SHORT).show();
+                adapter.insertItem(text.toString());
+                sendToSiteCategories(text.toString());
                 dialog.dismiss();
             }
         });
@@ -263,8 +355,8 @@ public class CategoriesFragment extends Fragment{
         public boolean onActionItemClicked(android.support.v7.view.ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.menu_removed:
+                    deleteCategories(adapter.servId(adapter.getSelectedItems()));
                     adapter.removeItems(adapter.getSelectedItems());
-                    deleteCategories();
                     mode.finish();
                     return true;
                 default:

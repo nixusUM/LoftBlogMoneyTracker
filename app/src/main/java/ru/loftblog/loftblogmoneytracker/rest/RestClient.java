@@ -1,5 +1,6 @@
 package ru.loftblog.loftblogmoneytracker.rest;
 
+
 import retrofit.RestAdapter;
 import ru.loftblog.loftblogmoneytracker.rest.api.BalanceAPI;
 import ru.loftblog.loftblogmoneytracker.rest.api.CategoryWorkAPI;
@@ -8,7 +9,6 @@ import ru.loftblog.loftblogmoneytracker.rest.api.GoogleWorkAPI;
 import ru.loftblog.loftblogmoneytracker.rest.api.LoginUserAPI;
 import ru.loftblog.loftblogmoneytracker.rest.api.RegisterUserAPI;
 import ru.loftblog.loftblogmoneytracker.rest.api.UserLogoutAPI;
-import ru.loftblog.loftblogmoneytracker.rest.models.CategExpenceModel;
 
 public class RestClient {
 

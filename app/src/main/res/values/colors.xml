@@ -7,4 +7,5 @@
     <color name="backGroundDark">#e6e6e6</color>
     <color name="greenBtn">#17b369</color>
     <color name="black">#000</color>
+    <color name="frame_background">#F7F7F7</color>
 </resources>

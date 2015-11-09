@@ -3,9 +3,10 @@ package ru.loftblog.loftblogmoneytracker.rest;
 import java.util.ArrayList;
 
 import retrofit.Callback;
+import ru.loftblog.loftblogmoneytracker.rest.models.AllCategoriesModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.BalanceModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategExpenceModel;
-import ru.loftblog.loftblogmoneytracker.rest.models.CategoryOptions;
+import ru.loftblog.loftblogmoneytracker.rest.models.CategoryData;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategoryWorkModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.ExpencesWorkModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.GoogleWorkModel;
@@ -35,7 +36,11 @@ public class RestService {
         return restClient.getCategoryAPI().addCategory(title, gToken, token);
     }
 
-    public CategoryWorkModel deleteCategory (Long id, String gToken, String token) {
+    public CategoryWorkModel editCategory (String title, int id, String gToken, String token) {
+        return restClient.getCategoryAPI().editCategory(title, id, gToken, token);
+    }
+
+    public CategoryWorkModel deleteCategory (Integer id, String gToken, String token) {
         return restClient.getCategoryAPI().deleteCategory(id, gToken, token);
     }
 
@@ -43,7 +48,7 @@ public class RestService {
         return restClient.getGoogleWorkAPI().googleJson(gToken);
     }
 
-    public CategoryWorkModel getAllCategories(String gToken, String token) {
+    public AllCategoriesModel getAllCategories(String gToken, String token) {
         return restClient.getCategoryAPI().getAllCategories(gToken, token);
     }
 
@@ -51,7 +56,7 @@ public class RestService {
         return restClient.getExpensesAPI().getAllExpenses(gToken, token);
     }
 
-    public ExpencesWorkModel addExpense(String sum,  String comment, Long categoryId, String trDate, String gToken, String token) {
+    public ExpencesWorkModel addExpense(float sum,  String comment, int categoryId, String trDate, String gToken, String token) {
         return restClient.getExpensesAPI().addExpense(sum, comment, categoryId, trDate, gToken, token);
     }
 
@@ -73,11 +78,11 @@ public class RestService {
         return restClient.getBalanceAPI().setBalance(sum, gToken, token);
     }
 
-    public void categoriesSync(Integer id, String title, String gToken, String token, Callback<CategoryOptions> cb) {
+    public void categoriesSync(Integer id, String title, String gToken, String token, Callback<CategoryData> cb) {
         restClient.getCategoryAPI().categoriesSync(id, title, gToken, token, cb);
     }
 
-    public void expensesSync(Integer id, String comment, String sum, String date, String gToken, String token, Callback<CategoryOptions> cb) {
+    public void expensesSync(Integer id, String comment, String sum, String date, String gToken, String token, Callback<CategoryData> cb) {
         restClient.getExpensesAPI().expensesSync(id, comment, sum, date, gToken, token, cb);
     }
 

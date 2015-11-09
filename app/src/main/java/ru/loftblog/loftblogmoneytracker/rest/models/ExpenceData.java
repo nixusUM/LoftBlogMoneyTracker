@@ -4,7 +4,7 @@ package ru.loftblog.loftblogmoneytracker.rest.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ExpenceOptions {
+public class ExpenceData {
 
     @Expose
     private String id;
@@ -14,7 +14,7 @@ public class ExpenceOptions {
     @Expose
     private String comment;
     @Expose
-    private String sum;
+    private float sum;
     @SerializedName("tr_date")
     @Expose
     private String trDate;
@@ -78,7 +78,7 @@ public class ExpenceOptions {
      * @return
      * The sum
      */
-    public String getSum() {
+    public float getSum() {
         return sum;
     }
 
@@ -87,7 +87,7 @@ public class ExpenceOptions {
      * @param sum
      * The sum
      */
-    public void setSum(String sum) {
+    public void setSum(float sum) {
         this.sum = sum;
     }
 

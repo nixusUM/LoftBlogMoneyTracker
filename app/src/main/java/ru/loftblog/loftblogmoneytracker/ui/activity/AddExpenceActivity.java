@@ -23,10 +23,7 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 import ru.loftblog.loftblogmoneytracker.MoneyTrackerApp;
 import ru.loftblog.loftblogmoneytracker.R;
@@ -35,6 +32,8 @@ import ru.loftblog.loftblogmoneytracker.database.models.Expenses;
 import ru.loftblog.loftblogmoneytracker.rest.RestService;
 import ru.loftblog.loftblogmoneytracker.rest.models.ExpencesWorkModel;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.DatePickerFragment;
+import ru.loftblog.loftblogmoneytracker.utils.NotificationUtil;
+import ru.loftblog.loftblogmoneytracker.utils.checks.CheckNetworkConnection;
 import ru.loftblog.loftblogmoneytracker.utils.checks.LoginUserStatus;
 
 @EActivity(R.layout.activity_add_expence)
@@ -85,7 +84,6 @@ public class AddExpenceActivity extends AppCompatActivity {
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
@@ -100,10 +98,16 @@ public class AddExpenceActivity extends AppCompatActivity {
             etDescript.setError(etTextEmpty);
             return;
         }
-        new Expenses(etPrice.getText().toString(), etDescript.getText().toString(), etToday.getText().toString(), (Categories)etCategories.getSelectedItem()).save();
+        if (etCategories.getSelectedItem() == null) {
+            Toast.makeText(this, R.string.errorToastItem, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        new Expenses(Float.parseFloat(etPrice.getText().toString()), etDescript.getText().toString(), etToday.getText().toString(), (Categories)etCategories.getSelectedItem()).save();
         Toast.makeText(this, getString(R.string.toastExpens) + etDescript.getText().toString() + getString(R.string.toastExpensesAdd), Toast.LENGTH_SHORT).show();
+        addExpense(Float.parseFloat(etPrice.getText().toString()), etDescript.getText().toString(), ((Categories) etCategories.getSelectedItem()).getServId(), etToday.getText().toString());
         finish();
         overridePendingTransition(R.anim.from_midle, R.anim.to_midle);
+        NotificationUtil.updateNotifications(this);
     }
 
     @Click(R.id.etToday)
@@ -120,17 +124,16 @@ public class AddExpenceActivity extends AppCompatActivity {
         };
         datePicker.show(getSupportFragmentManager(), getString(R.string.pickerDialogName));
     }
+
+    @Background
+    void addExpense(float sum, String descr, int id, String day) {
+        RestService restService = new RestService();
+            if (CheckNetworkConnection.isOnline(this)) {
+                ExpencesWorkModel workModel = restService.addExpense(sum, descr, id, day, MoneyTrackerApp.getGoogleToken(this)
+                        , MoneyTrackerApp.getToken(this));
+            if (LoginUserStatus.STATUS_OK.equals(workModel.getStatus()))
+                Log.e(LOG_TAG, "Add Expence to server: " + workModel.getId());
+        }
+    }
 }
 
-
-//    @Background
-//    void addExpense() {
-//        Categories categories = new Categories();
-//        RestService restService = new RestService();
-//        if ((etCategories.getSelectedItem() == categories.getTitle())) {
-//            ExpencesWorkModel addExpenseResp = restService.addExpense(etPrice.getText().toString(), etDescript.getText().toString(), categories.getId(), getToday(),
-//                    MoneyTrackerApp.getGoogleToken(this), MoneyTrackerApp.getToken(this));
-//            if (LoginUserStatus.STATUS_OK.equals(addExpenseResp.getStatus()))
-//                Log.e(LOG_TAG, "Add Expence to server: " + addExpenseResp.getId());
-//        }
-//    }
