@@ -6,14 +6,19 @@
         android:checkableBehavior="single">
     <item android:id="@+id/drawer_expenses"
         android:title="@string/nav.drawer.expenses"
+        android:icon="@drawable/ic_action_add"
         android:checked="true" />
     <item android:id="@+id/drawer_categories"
+        android:icon="@drawable/ic_action_database"
         android:title="@string/nav.drawer.categories"/>
     <item android:id="@+id/drawer_statistics"
+        android:icon="@drawable/ic_action_bargraph"
         android:title="@string/nav.drawer.statistics"/>
     <item android:id="@+id/drawer_settings"
+        android:icon="@drawable/ic_setting_light"
         android:title="@string/nav.drawer.settings" />
     <item android:id="@+id/drawer_logout"
+        android:icon="@drawable/ic_action_goleft"
         android:title="@string/nav.drawer.logout" />
     </group>
 </menu>

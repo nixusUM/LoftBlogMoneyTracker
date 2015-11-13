@@ -92,8 +92,6 @@ public class TrackerSyncAdapter extends AbstractThreadedSyncAdapter {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
-// we can enable inexact timers in our periodic sync
-
             SyncRequest request = new SyncRequest.Builder().
                     syncPeriodic(syncInterval, flexTime).
                     setSyncAdapter(account, authority).

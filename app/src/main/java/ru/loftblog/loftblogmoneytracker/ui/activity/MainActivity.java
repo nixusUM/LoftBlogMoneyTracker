@@ -27,9 +27,12 @@ import java.util.List;
 import ru.loftblog.loftblogmoneytracker.MoneyTrackerApp;
 import ru.loftblog.loftblogmoneytracker.R;
 import ru.loftblog.loftblogmoneytracker.database.models.Categories;
+import ru.loftblog.loftblogmoneytracker.database.models.Expenses;
 import ru.loftblog.loftblogmoneytracker.rest.RestService;
 import ru.loftblog.loftblogmoneytracker.rest.models.AllCategoriesModel;
+import ru.loftblog.loftblogmoneytracker.rest.models.AllExpensesModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategoryData;
+import ru.loftblog.loftblogmoneytracker.rest.models.ExpenceData;
 import ru.loftblog.loftblogmoneytracker.rest.models.GoogleWorkModel;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.CategoriesFragment_;
 import ru.loftblog.loftblogmoneytracker.ui.fragments.ExpensesFragment_;
@@ -69,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getAllCategories();
-        defaultCategories();
+        getAllExpenses();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, new ExpensesFragment_()).commit();
         }
@@ -106,8 +109,6 @@ public class MainActivity extends AppCompatActivity {
             if (categories.isEmpty()) {
                 if (LoginUserStatus.STATUS_OK.equals(getCategories.getStatus())) {
                     for (CategoryData category : getCategories.getCategories()) {
-                        Log.e(LOG_TAG, "Category: " + category.getTitle() +
-                                ", Category id: " + category.getId());
                         new Categories(category.getTitle(), category.getId()).save();
                     }
                 }
@@ -115,13 +116,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void defaultCategories() {
-        List<Categories> categories = new Select().from(Categories.class).execute();
-        if (categories.isEmpty()) {
-            new Categories("Fun").save();
-            new Categories("Clothes").save();
-            new Categories("Food").save();
-            new Categories("Travels").save();
+
+    @Background
+    void getAllExpenses() {
+        RestService restService = new RestService();
+        List<Expenses> expenses = new Select().from(Expenses.class).execute();
+        if (CheckNetworkConnection.isOnline(this)) {
+            AllExpensesModel expensesResp = restService.getAllExpenses(MoneyTrackerApp.getGoogleToken(this), MoneyTrackerApp.getToken(this));
+            if (expenses.isEmpty()) {
+                if (LoginUserStatus.STATUS_OK.equals(expensesResp.getStatus())) {
+                    for (ExpenceData expense : expensesResp.getExpenses()) {
+                        Log.e(LOG_TAG, "Expense id: " + expense.getId() +
+                                ", Expense category id: " + expense.getCategoryId() +
+                                ", Expense comment: " + expense.getComment() +
+                                ", Expense summ: " + expense.getSum() +
+                                ", Expense date: " + expense.getTrDate());
+                    }
+                }
+            }
         }
     }
 

@@ -102,9 +102,16 @@ public class AddExpenceActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.errorToastItem, Toast.LENGTH_SHORT).show();
             return;
         }
-        new Expenses(Float.parseFloat(etPrice.getText().toString()), etDescript.getText().toString(), etToday.getText().toString(), (Categories)etCategories.getSelectedItem()).save();
+        if (etToday.getText().toString().isEmpty()) {
+            Toast.makeText(this, R.string.errorToastDate, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new Expenses(Float.parseFloat(etPrice.getText().toString()), etDescript.getText().toString(), etToday.getText().toString(),
+                (Categories)etCategories.getSelectedItem()).save();
+        addExpense(Float.parseFloat(etPrice.getText().toString()), etDescript.getText().toString(),
+                ((Categories) etCategories.getSelectedItem()).getServId(), etToday.getText().toString());
         Toast.makeText(this, getString(R.string.toastExpens) + etDescript.getText().toString() + getString(R.string.toastExpensesAdd), Toast.LENGTH_SHORT).show();
-        addExpense(Float.parseFloat(etPrice.getText().toString()), etDescript.getText().toString(), ((Categories) etCategories.getSelectedItem()).getServId(), etToday.getText().toString());
         finish();
         overridePendingTransition(R.anim.from_midle, R.anim.to_midle);
         NotificationUtil.updateNotifications(this);
