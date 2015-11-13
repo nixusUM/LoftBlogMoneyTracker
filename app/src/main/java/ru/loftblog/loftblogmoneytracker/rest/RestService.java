@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import retrofit.Callback;
 import ru.loftblog.loftblogmoneytracker.rest.models.AllCategoriesModel;
+import ru.loftblog.loftblogmoneytracker.rest.models.AllExpensesModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.BalanceModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategExpenceModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategoryData;
@@ -52,7 +53,7 @@ public class RestService {
         return restClient.getCategoryAPI().getAllCategories(gToken, token);
     }
 
-    public ExpencesWorkModel getAllExpenses(String gToken, String token) {
+    public AllExpensesModel getAllExpenses(String gToken, String token) {
         return restClient.getExpensesAPI().getAllExpenses(gToken, token);
     }
 
@@ -67,8 +68,6 @@ public class RestService {
     public ArrayList<CategExpenceModel> getAllCategoriesWithExpenses(String gToken, String token) {
         return restClient.getCategoryAPI().getAllCategoriesWithExpenses(gToken, token);
     }
-
-
 
     public BalanceModel getBalance(String gToken, String token) {
         return restClient.getBalanceAPI().getBalance(gToken, token);

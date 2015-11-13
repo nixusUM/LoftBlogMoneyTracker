@@ -3,13 +3,14 @@ package ru.loftblog.loftblogmoneytracker.rest.api;
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Query;
+import ru.loftblog.loftblogmoneytracker.rest.models.AllExpensesModel;
 import ru.loftblog.loftblogmoneytracker.rest.models.CategoryData;
 import ru.loftblog.loftblogmoneytracker.rest.models.ExpencesWorkModel;
 
 public interface ExpensesAPI {
 
     @GET("/transactions")
-    ExpencesWorkModel getAllExpenses(@Query("google_token") String gToken,
+    AllExpensesModel getAllExpenses(@Query("google_token") String gToken,
                                     @Query("auth_token") String token);
 
     @GET("/transactions/add")

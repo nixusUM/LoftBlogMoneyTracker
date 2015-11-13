@@ -51,7 +51,7 @@ public class NotificationUtil {
                     PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(intent);
 
-            builder.setSmallIcon(R.mipmap.ic_launcher);
+            builder.setSmallIcon(R.drawable.ic_action_bulb);
             if (lightNotification)
                 builder.setLights(Color.CYAN, 300, 1500);
             if (vibraNotification)
@@ -60,7 +60,7 @@ public class NotificationUtil {
             builder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
             builder.setAutoCancel(true);
 
-            String title = context.getString(R.string.app_name);
+            String title = context.getString(R.string.notificationAction);
             String contentText =
                     context.getResources().getString(R.string.notification_message);
             Bitmap largeIcon =

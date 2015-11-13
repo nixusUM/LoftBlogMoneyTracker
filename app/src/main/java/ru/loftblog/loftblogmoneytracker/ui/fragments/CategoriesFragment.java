@@ -109,11 +109,7 @@ public class CategoriesFragment extends Fragment{
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                deleteCategories(adapter.getServId(viewHolder.getAdapterPosition()));
-                adapter.removeItem(viewHolder.getAdapterPosition());
-                final Snackbar snackbar = Snackbar
-                        .make(recyclerView, R.string.deleteRecord , Snackbar.LENGTH_LONG);
-                snackbar.show();
+                alerDialogEdit(viewHolder.getAdapterPosition());
             }
         };
 
@@ -146,9 +142,6 @@ public class CategoriesFragment extends Fragment{
                     public void onItemClicked(int position) {
                         if (actionMode != null) {
                             toggleSelection(position);
-                        }
-                        if (actionMode == null) {
-                            alerDialogEdit(position);
                         }
                     }
 
@@ -303,6 +296,7 @@ public class CategoriesFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                adapter.notifyItemChanged(postion);
             }
         });
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);

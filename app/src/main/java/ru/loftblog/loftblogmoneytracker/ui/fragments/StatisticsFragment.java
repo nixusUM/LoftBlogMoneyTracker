@@ -19,7 +19,6 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +70,7 @@ public class StatisticsFragment extends Fragment{
                 if (e == null)
                     return;
                     Toast.makeText(getContext(), xData.get(e.getXIndex()) + ": " +
-                            yData.get(e.getXIndex()).getVal() , Toast.LENGTH_SHORT).show();
+                            yData.get(e.getXIndex()).getVal() + " " + getString(R.string.rMoney) , Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -102,7 +101,7 @@ public class StatisticsFragment extends Fragment{
                 for (Expenses expense : category.expenses()) {
                     sum += expense.getPrice();
                 }
-                if (sum != 0) {
+                if (sum != 0f) {
                     xData.add(category.title);
                     yData.add(new Entry(sum, xData.size() - 1));
                 }
